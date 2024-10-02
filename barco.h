@@ -7,11 +7,11 @@ typedef enum {
     PATRULLA
 } TipoBarco;
 
-typedef struct {
+struct Barco {
     TipoBarco tipo;
-    float velocidad;
-} Barco;
+    int velocidad;
+};
 
-void imprimirBarco(Barco b);
+void imprimirBarco(struct Barco b);
 
 #endif // BARCO_H

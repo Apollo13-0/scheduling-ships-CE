@@ -1,7 +1,7 @@
 #include "barco.h"
 #include <stdio.h>
 
-void imprimirBarco(Barco b) {
+void imprimirBarco(struct Barco b) {
     printf("Tipo de barco: ");
     
     switch(b.tipo) {
@@ -16,5 +16,5 @@ void imprimirBarco(Barco b) {
             break;
     }
     
-    printf("Velocidad: %.2f\n", b.velocidad);
+    printf("Velocidad: %i\n", b.velocidad);
 }

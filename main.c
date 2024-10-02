@@ -2,9 +2,9 @@
 
 void pruebaBarco() {
 
-    Barco barco1 = {NORMAL, 10.0};
-    Barco barco2 = {PESQUERO, 15.0};
-    Barco barco3 = {PATRULLA, 20.0};
+    struct Barco barco1 = {NORMAL, 10};
+    struct Barco barco2 = {PESQUERO, 15};
+    struct Barco barco3 = {PATRULLA, 20};
 
     imprimirBarco(barco1);
     imprimirBarco(barco2);
