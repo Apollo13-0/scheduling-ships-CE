@@ -5,13 +5,14 @@ typedef enum {
     NORMAL,
     PESQUERO,
     PATRULLA
-} TipoBarco;
+} ShipType;
 
-struct Barco {
-    TipoBarco tipo;
-    int velocidad;
+struct Ship {
+    ShipType type;
+    int speed;
+    int priority;
 };
 
-void imprimirBarco(struct Barco b);
+void printShip(struct Ship b);
 
 #endif // BARCO_H

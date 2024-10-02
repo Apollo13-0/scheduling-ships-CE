@@ -1,10 +1,10 @@
-#include "barco.h"
+#include "ship.h"
 #include <stdio.h>
 
-void imprimirBarco(struct Barco b) {
+void printShip(struct Ship b) {
     printf("Tipo de barco: ");
     
-    switch(b.tipo) {
+    switch(b.type) {
         case NORMAL:
             printf("Normal\n");
             break;
@@ -16,5 +16,6 @@ void imprimirBarco(struct Barco b) {
             break;
     }
     
-    printf("Velocidad: %i\n", b.velocidad);
+    printf("Velocidad: %i\n", b.speed);
+    printf("Prioridad: %i\n", b.priority);
 }
