@@ -1,20 +1,25 @@
 // CEthreads.c
+#define _GNU_SOURCE
 #include "CEthreads.h"
 #include <ucontext.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <sched.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
-ucontext_t main_context;  // Contexto principal
 
 // Función que ejecuta la rutina del hilo
-void thread_start(thread_t *thread) {
-    // Ejecutar la función del hilo
+int thread_start(void* arg) {
+    thread_t *thread = (thread_t*) arg;
+    // Ejecutar la función asignada al hilo
     thread->retval = thread->proc(thread->arg);
-    // Marcar el hilo como finalizado
+    // Marcar el hilo como terminado
     thread->state = THREAD_FINISHED;
-    // Cambiar de vuelta al contexto principal
-    setcontext(&main_context);
+
+    // Finalizar el proceso del hilo
+    _exit(0);
 }
 
 int CEthread_create(thread_t* thread, void* (*start_routine)(void*), void* arg) {
@@ -25,33 +30,18 @@ int CEthread_create(thread_t* thread, void* (*start_routine)(void*), void* arg) 
     thread->proc = start_routine;  // Asignar la función del hilo
     thread->arg = arg;             // Asignar el argumento
 
-    // Asignar una pila al hilo
+    // Asignar memoria para la pila del hilo
     thread->stack = malloc(STACK_SIZE);
     if (thread->stack == NULL) {
         return -1;  // Error al asignar la pila
     }
 
-    // Asignar memoria para el contexto del hilo
-    thread->ucp = (ucontext_t *) malloc(sizeof(ucontext_t));
-    if (thread->ucp == NULL) {
-        free(thread->stack);
-        return -1;  // Error al asignar el contexto
+    // Crear el hilo utilizando clone
+    thread->tid = clone(thread_start, thread->stack + STACK_SIZE, CLONE_VM | CLONE_FS | CLONE_FILES | SIGCHLD, thread);
+    if (thread->tid == -1) {
+        free(thread->stack);  // Liberar la memoria si falla
+        return -1;            // Error al crear el hilo
     }
-
-    // Obtener el contexto actual y guardarlo en el nuevo hilo
-    if (getcontext(thread->ucp) == -1) {
-        free(thread->stack);
-        free(thread->ucp);
-        return -1;  // Error al obtener el contexto
-    }
-
-    // Configurar el contexto del hilo para que use la nueva pila
-    thread->ucp->uc_stack.ss_sp = thread->stack;
-    thread->ucp->uc_stack.ss_size = STACK_SIZE;
-    thread->ucp->uc_link = &main_context;  // Volver al contexto principal cuando termine
-
-    // Configurar el contexto del hilo para que ejecute la función `thread_start`
-    makecontext(thread->ucp, (void (*)(void))thread_start, 1, thread);
 
     return 0;  // Hilo creado con éxito
 }
@@ -61,17 +51,16 @@ void CEthread_end(){
 }
 
 int CEthread_join(thread_t* thread, void** retval) {
-    // Cambiar al contexto del hilo para que se ejecute
-    swapcontext(&main_context, thread->ucp);
+    // Esperar a que el hilo hijo termine
+    waitpid(thread->tid, NULL, 0);
 
-    // Al volver aquí, el hilo debe haber terminado
+    // Si se espera un valor de retorno, asignarlo
     if (thread->state == THREAD_FINISHED && retval != NULL) {
-        *retval = thread->retval;  // Retornar el valor de retorno del hilo
+        *retval = thread->retval;
     }
 
     return 0;
 }
-
 void CEmutex_init(){
     printf("CEmutex_init\n");
 }
