@@ -1,5 +1,7 @@
 #include "tests/ship_test.h"
 #include "tests/thread_test.h"
+#include "tests/schedulers_test.h"
+
 
 
 int main() {
