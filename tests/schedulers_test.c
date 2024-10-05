@@ -1,9 +1,7 @@
+#include "schedulers_test.h"
 #include <stdio.h>
-#include "ship.h"
-#include "ocean.h"
-#include "schedulers.h"
 
-int main() {
+int test_schedulers() {
     // Ocean on the left side
     struct Ocean leftOcean;
     leftOcean.numShips = 0;
