@@ -5,5 +5,5 @@ void canalTest() {
 
     struct canal canal1 = {RR, TICO,10,5};
     
-    print_canal(canal1);
+    init_canal();
 }
