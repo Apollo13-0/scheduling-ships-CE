@@ -17,7 +17,6 @@ int thread_start(void* arg) {
     thread->retval = thread->proc(thread->arg);
     // Marcar el hilo como terminado
     thread->state = THREAD_FINISHED;
-
     // Finalizar el proceso del hilo
     _exit(0);
 }
@@ -46,8 +45,9 @@ int CEthread_create(thread_t* thread, void* (*start_routine)(void*), void* arg) 
     return 0;  // Hilo creado con éxito
 }
 
-void CEthread_end(){
-    printf("CEthread_end\n");
+void CEthread_end(thread_t* thread) {
+    // liberar recursos
+    free(thread->stack);
 }
 
 int CEthread_join(thread_t* thread, void** retval) {
