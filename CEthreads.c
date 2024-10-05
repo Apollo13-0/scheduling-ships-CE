@@ -13,10 +13,16 @@
 // Función que ejecuta la rutina del hilo
 int thread_start(void* arg) {
     thread_t *thread = (thread_t*) arg;
+
+    // Marcar el hilo como en ejecucion
+    thread->state = THREAD_RUNNING;
+    //printf("Hilo %lu está corriendo. Estado: %d (THREAD_RUNNING)\n", thread->tid, thread->state);
     // Ejecutar la función asignada al hilo
     thread->retval = thread->proc(thread->arg);
     // Marcar el hilo como terminado
     thread->state = THREAD_FINISHED;
+    //printf("Hilo %lu ha terminado. Estado: %d (THREAD_FINISHED)\n", thread->tid, thread->state);
+
     // Finalizar el proceso del hilo
     _exit(0);
 }
@@ -28,6 +34,8 @@ int CEthread_create(thread_t* thread, void* (*start_routine)(void*), void* arg) 
     thread->state = THREAD_READY;  // El hilo está listo para ejecutarse
     thread->proc = start_routine;  // Asignar la función del hilo
     thread->arg = arg;             // Asignar el argumento
+
+    //printf("Hilo %lu ha sido creado. Estado: %d (THREAD_READY)\n", thread->tid, thread->state);
 
     // Asignar memoria para la pila del hilo
     thread->stack = malloc(STACK_SIZE);
@@ -61,14 +69,21 @@ int CEthread_join(thread_t* thread, void** retval) {
 
     return 0;
 }
-void CEmutex_init(){
-    printf("CEmutex_init\n");
+
+void CEmutex_init(mutex_t *mutex){
+    mutex->locked = 0;
 }
 
-void CEmutex_destroy(){
-    printf("CEmutex_destroy\n");
+void CEmutex_lock(mutex_t *mutex) {
+    while (__sync_lock_test_and_set(&mutex->locked, 1)) {
+        // Busy waiting
+    }
 }
 
-void CEmutex_unlock(){
-    printf("CEmutex_unlock\n");
+void CEmutex_unlock(mutex_t *mutex) {
+    __sync_lock_release(&mutex->locked);
+}
+
+void CEmutex_destroy(mutex_t *mutex) {
+    free(mutex);
 }

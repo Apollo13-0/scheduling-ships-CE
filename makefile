@@ -4,7 +4,7 @@ CFLAGS = -Wall -g   # Mostrar todas las advertencias y habilitar debug (-g)
 LDFLAGS =           # Flags adicionales de linkeo si son necesarios
 
 # Archivos fuente y objetos
-SRCS = main.c ship.c tests/ship_test.c tests/thread_test.c CEthreads.c
+SRCS = main.c ship.c CEthreads.c tests/ship_test.c tests/thread_test.c tests/mutex_test.c
 OBJS = $(SRCS:.c=.o)  # Cambia .c por .o para generar los archivos objeto
 
 # Nombre del ejecutable
