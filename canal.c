@@ -18,7 +18,7 @@ void init_canal(){
     c.canal_list=NULL;
     c.right_queue=NULL;
     c.left_queue=NULL;
-    c.max_ships_queue=3;
+    c.max_ships_queue=100;
     
 
     for(int i=0; i<c.canal_length;i++){
@@ -31,7 +31,7 @@ void init_canal(){
         insertAtBeginning(&c.left_queue,1);
     }
 
-    c.canal_flow_control= EQUIDAD;
+    c.canal_flow_control= LETRERO;
     switch(c.canal_flow_control) {
         case EQUIDAD:
             equidad(c);
@@ -88,50 +88,44 @@ void equidad (struct canal c){
 
 int letrero (struct canal c){
     printf("LETRERO\n");
-    int sign_time=1;//user_sign_time;
-    //int elapsedTime=0;
+    float sign_time=0.0005;//user_sign_time;
     int whi=0;
-    //time_t before, after;
     
-    int elapsedTime=0;
-    while(whi<3){//MANTIENE EL CANAL ACTIVO
+    float elapsedTime=0;
+    while(whi<1){//MANTIENE EL CANAL ACTIVO
         
-        //time(&before);
         clock_t before=clock();
-        printf("BEFORE: %d\n",before);
 
-        while(sign_time>elapsedTime){
-            printf("WHILE\n");
+        while(sign_time>elapsedTime){//MOVE RIGHT
+            
             moveToRight(c);
             clock_t after=clock()-before;
-            //time(&after);
-            printf("AFTER: %d\n",after);
-            clock_t difference=after-before;
-
-            printf("DIFF: %d\n",difference);
-            elapsedTime=((double)(after))/CLOCKS_PER_SEC;
-            //elapsedTime=difftime(after,before);
-            printf("ELAPS: %d\n",elapsedTime);
             
-
+            clock_t difference=after-before;
+            
+            elapsedTime=((float)(after))/CLOCKS_PER_SEC;
+            
         }
-        break;
+        
         emptyLeft(c);
         before=clock();
-        //int elapsedTime=0;
-        do{
+        break;
+        while(sign_time>=elapsedTime){//MOVE LEFT
             moveToLeft(c);
-            clock_t difference=clock()-before;
-            elapsedTime=difference*1000000/CLOCKS_PER_SEC;
+            clock_t after=clock()-before;
+            
+            clock_t difference=after-before;
+
+            
+            elapsedTime=((double)(after))/CLOCKS_PER_SEC;
 
 
-        }while(sign_time>=elapsedTime);
+        }
         emptyRight(c);
 
 
 
-
-
+        
         whi++;
     }
 
@@ -275,7 +269,7 @@ void emptyLeft(struct canal c){
     }
 
         for(int o = 1; o < c.canal_length+1; o++){
-        printf("i: +w, CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
+        printf("EMPTY LEFT, CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
     } 
     printf("==============================================\n");
 
@@ -304,7 +298,7 @@ void emptyRight(struct canal c){
         }
 
         for(int o = 1; o < c.canal_length+1; o++){
-        printf("i: +w, CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
+        printf("EMPTY RIGHT, CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
     } 
     printf("==============================================\n");
 
