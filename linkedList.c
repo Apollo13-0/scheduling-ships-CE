@@ -248,3 +248,29 @@ int isNull(Node** head){
     return 0;
 
 }
+
+int noShips(Node** head)
+{
+    
+    // Comprobar si la lista está vacía
+    
+    if (*head == NULL) {
+        printf("La lista está vacía.\n");
+        return -1;  // Valor de error, puede ser personalizado
+    }
+
+    Node* temp = *head;
+    int i;
+    while(temp!=NULL){
+        if(temp->data==1){
+            return 0;
+        }else{
+            temp = temp->next;
+        }
+    }
+
+    // Devolver el valor del nodo en la posición dada
+    return 1;
+}
+
+
