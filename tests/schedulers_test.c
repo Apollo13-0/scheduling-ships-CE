@@ -19,6 +19,8 @@ int test_schedulers() {
     struct Ship ship1 = {NORMAL, 10, 1};
     struct Ship ship2 = {PESQUERO, 20, 2};
     struct Ship ship3 = {PATRULLA, 30, 3};
+    struct Ship ship4 = {PATRULLA, 30, 3};
+
 
     // Adding ships to the left ocean
     addShip(&leftOcean, ship1);
@@ -29,23 +31,31 @@ int test_schedulers() {
     addShip(&rightOcean, ship1);
     addShip(&rightOcean, ship2);
     addShip(&rightOcean, ship3);
+    addShip(&rightOcean, ship4);
+
 
 
     //Se escoge que usar en que oceano
-    /*printf("FCFS:\n");
-    fcfs(&leftOcean);
+    //printf("FCFS:\n");
+    //fcfs(&leftOcean);
+    //fcfs(&rightOcean);
 
-    printf("\nRound Robin (quantum = 2):\n");
-    roundRobin(&rightOcean, 2);
+    printf("\nRound Robin (quantum = 10):\n");
+    roundRobin(&rightOcean, 10);
 
-    printf("\nSJF:\n");
-    sjf(&leftOcean);
+    //printf("\nSJF:\n");
+    //sjf(&leftOcean);
+    //sjf(&rightOcean);
 
-    printf("\nPriority:\n");
-    priorityScheduler(&rightOcean);
+    //printf("\nPriority:\n");
+    //priorityScheduler(&rightOcean);
+    //priorityScheduler(&leftOcean);
 
-    printf("\nReal-Time (maxTime = 5):\n");
-    realTime(&leftOcean, 5);*/
+
+    //printf("\nReal-Time (maxTime = 5):\n");
+    //realTime(&leftOcean, 5);
+    //realTime(&rightOcean, 5);
+
 
     return 0;
 }
