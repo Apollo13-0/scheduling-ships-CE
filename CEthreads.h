@@ -44,12 +44,15 @@ int CEthread_join(thread_t* thread, void **retval);
 
 // mutex: mutex to be initialized
 // mutexattr: mutex attributes
-void CEmutex_init();
+void CEmutex_init(mutex_t *mutex);
+
+//mutex: mutex to be locked
+void CEmutex_lock(mutex_t *mutex);
 
 // mutex: mutex to be destroyed
-void CEmutex_destroy();
+void CEmutex_destroy(mutex_t *mutex);
 
 // mutex: mutex to be unlocked
-void CEmutex_unlock();
+void CEmutex_unlock(mutex_t *mutex);
 
 #endif // CETHREADS_H
