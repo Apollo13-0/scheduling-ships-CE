@@ -240,3 +240,11 @@ void setValue(Node** head,int data_in, int position)
     temp->data=data_in;
 }
 
+int isNull(Node** head){
+    if (*head == NULL) {
+        printf("La lista está vacía.\n");
+        return 1;  
+    }
+    return 0;
+
+}

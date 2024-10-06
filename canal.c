@@ -1,6 +1,7 @@
 #include "canal.h"
 #include <stdio.h>
 #include "ship.h"
+#include <time.h>
 
 
 /*
@@ -19,16 +20,6 @@ void init_canal(){
     c.left_queue=NULL;
     c.max_ships_queue=3;
     
-    /*int canal_list[c.canal_length];
-    
-    int left_queue[c.max_ships_queue];
-    int right_queue[c.max_ships_queue];
-
-    c.canal_list=canal_list;
-    c.right_queue=right_queue;
-    c.left_queue=left_queue;*/
-    
-
 
     for(int i=0; i<c.canal_length;i++){
         insertAtBeginning(&c.canal_list,0);
@@ -70,144 +61,19 @@ void equidad (struct canal c){
         //==============================  LEFT------RIGHT=========================
         for(int i=0; i<w;i++){
            //VERIFICA SI EL ULTIMO ES 1
-            if(getValue(&c.canal_list,c.canal_length)==1){
-                setValue(&c.canal_list, 0, c.canal_length);
-            } 
-
-            for(int k=c.canal_length; k>1;k--){//MOVER LOS BARCOS DEL CANAL
-                
-                //VERIFICA SI LA POSICION K ESTA VACIA PARA AVANZAR
-                if(getValue(&c.canal_list,k)==0){
-                    int data=getValue(&c.canal_list,k-1);//BARCO ANTERIOR
-                    
-                    setValue(&c.canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
-                    
-                    setValue(&c.canal_list,0 , k-1);//DEJAR VACIA LA POSICION ANTERIOR
-                    
-                }
-                
-                else{
-                    continue;
-                }
-            }
-            //METER BARCO AL CANAL
-            if(getValue(&c.canal_list,1)==0 && c.left_queue!=NULL){
-                int data=getValue(&c.left_queue,0);
-                
-                //insertAtBeginning(&c.canal_list,data);
-                setValue(&c.canal_list,data , 1);
-                
-                deleteAtBeginning(&c.left_queue);
-            
-            }
-            
-            
-            for(int o = 1; o < c.canal_length+1; o++){
-                printf("i: %d, CANAL[%d]: %d\n",i, o,getValue(&c.canal_list,o) );
-            } 
-            printf("==============================================\n");
+            moveToRight(c);
             
         }
-        //VACIAR EL CANAL SI TODAVÍA HAY BARCOS
-        while(getValue(&c.canal_list,c.canal_length)==1){
-                setValue(&c.canal_list, 0, c.canal_length);
-
-                for(int k=c.canal_length; k>1;k--){//MOVER LOS BARCOS DEL CANAL
-                    //VERIFICA SI LA POSICION K ESTA VACIA PARA AVANZAR
-                    if(getValue(&c.canal_list,k)==0){
-                        int data=getValue(&c.canal_list,k-1);//BARCO ANTERIOR
-                        
-                        setValue(&c.canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
-                        
-                        setValue(&c.canal_list,0 , k-1);//DEJAR VACIA LA POSICION ANTERIOR
-                        
-                    }
-                    
-                    else{
-                        continue;
-                    }
-                }
-
-                for(int o = 1; o < c.canal_length+1; o++){
-                printf("i: +w, CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
-            } 
-            printf("==============================================\n");
-
-            } 
+        emptyRight(c);
 
         //==============================  RIGHT------LEFT=========================
         printf("\n==================== CAMBIA DE DIRECCION ================\n");
         for(int i=0; i<w;i++){
-           //VERIFICA SI EL ULTIMO ES 1
-            if(getValue(&c.canal_list,1)==1){
-                setValue(&c.canal_list, 0, 1);
-            } 
-
-            for(int k=1; k<c.canal_length;k++){//MOVER LOS BARCOS DEL CANAL
-                
-                //VERIFICA SI LA POSICION K ESTA VACIA PARA AVANZAR
-                if(getValue(&c.canal_list,k)==0){
-                    int data=getValue(&c.canal_list,k+1);//BARCO ANTERIOR
-                    
-                    setValue(&c.canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
-                    
-                    setValue(&c.canal_list,0 , k+1);//DEJAR VACIA LA POSICION ANTERIOR
-                    
-                }
-                
-                else{
-                    continue;
-                }
-            }
-            //METER BARCO AL CANAL
-            if(getValue(&c.canal_list,c.canal_length)==0 && c.right_queue!=NULL){
-                int data=getValue(&c.right_queue,0);
-                
-                //insertAtBeginning(&c.canal_list,data);
-                setValue(&c.canal_list,data , c.canal_length);
-                
-                deleteAtBeginning(&c.right_queue);
-            
-            }
-            
-            
-            for(int o = 1; o < c.canal_length+1; o++){
-                printf("i: %d, CANAL[%d]: %d\n",i, o,getValue(&c.canal_list,o) );
-            } 
-            printf("==============================================\n");
+           moveToLeft(c);
             
         }
-
-        //VACIAR EL CANAL SI TODAVÍA HAY BARCOS
-        while(getValue(&c.canal_list,1)==1){
-                setValue(&c.canal_list, 0, 1);
-
-                for(int k=1; k<c.canal_length;k++){//MOVER LOS BARCOS DEL CANAL
-                
-                //VERIFICA SI LA POSICION K ESTA VACIA PARA AVANZAR
-                if(getValue(&c.canal_list,k)==0){
-                    int data=getValue(&c.canal_list,k+1);//BARCO ANTERIOR
-                    
-                    setValue(&c.canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
-                    
-                    setValue(&c.canal_list,0 , k+1);//DEJAR VACIA LA POSICION ANTERIOR
-                    
-                }
-                
-                else{
-                    continue;
-                }
-            }
-
-                for(int o = 1; o < c.canal_length+1; o++){
-                printf("i: +w, CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
-            } 
-            printf("==============================================\n");
-
-            }
-
-
-
+        emptyLeft(c);
+        
 
 
         whi++;
@@ -222,7 +88,55 @@ void equidad (struct canal c){
 
 int letrero (struct canal c){
     printf("LETRERO\n");
-    //int sign_time=user_sign_time;
+    int sign_time=1;//user_sign_time;
+    //int elapsedTime=0;
+    int whi=0;
+    //time_t before, after;
+    
+    int elapsedTime=0;
+    while(whi<3){//MANTIENE EL CANAL ACTIVO
+        
+        //time(&before);
+        clock_t before=clock();
+        printf("BEFORE: %d\n",before);
+
+        while(sign_time>elapsedTime){
+            printf("WHILE\n");
+            moveToRight(c);
+            clock_t after=clock()-before;
+            //time(&after);
+            printf("AFTER: %d\n",after);
+            clock_t difference=after-before;
+
+            printf("DIFF: %d\n",difference);
+            elapsedTime=((double)(after))/CLOCKS_PER_SEC;
+            //elapsedTime=difftime(after,before);
+            printf("ELAPS: %d\n",elapsedTime);
+            
+
+        }
+        break;
+        emptyLeft(c);
+        before=clock();
+        //int elapsedTime=0;
+        do{
+            moveToLeft(c);
+            clock_t difference=clock()-before;
+            elapsedTime=difference*1000000/CLOCKS_PER_SEC;
+
+
+        }while(sign_time>=elapsedTime);
+        emptyRight(c);
+
+
+
+
+
+        whi++;
+    }
+
+
+
     return 0;   
 }
 
@@ -232,6 +146,170 @@ int tico (struct canal c){
     return 0;   
 }
 
+
+void moveToLeft(struct canal c){
+    //VERIFICA SI EL ULTIMO ES 1
+    if(getValue(&c.canal_list,1)==1){
+        setValue(&c.canal_list, 0, 1);
+    } 
+
+    for(int k=1; k<c.canal_length;k++){//MOVER LOS BARCOS DEL CANAL
+        
+        //VERIFICA SI LA POSICION K ESTA VACIA PARA AVANZAR
+        if(getValue(&c.canal_list,k)==0){
+            int data=getValue(&c.canal_list,k+1);//BARCO ANTERIOR
+            
+            setValue(&c.canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
+            
+            setValue(&c.canal_list,0 , k+1);//DEJAR VACIA LA POSICION ANTERIOR
+            
+        }
+        
+        else{
+            continue;
+        }
+    }
+    //METER BARCO AL CANAL
+    if(getValue(&c.canal_list,c.canal_length)==0 && c.right_queue!=NULL){
+        int data=-1;
+        for (int s=1;s<=c.max_ships_queue;s++){
+            if(getValue(&c.right_queue,s)==1 ){
+                data=getValue(&c.right_queue,s);
+                setValue(&c.right_queue,0,s);
+                break;
+            }else{
+                data=-1;
+            }
+        }
+        if(data!=-1){
+            printf("METE BARCO\n");
+            setValue(&c.canal_list,data ,  c.canal_length);
+        }
+    
+    }
+    
+    
+    for(int o = 1; o < c.canal_length+1; o++){
+        printf("CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
+    } 
+    printf("==============================================\n");
+
+
+}
+void moveToRight(struct canal c){
+    if(getValue(&c.canal_list,c.canal_length)==1){
+        setValue(&c.canal_list, 0, c.canal_length);
+    } 
+
+    for(int k=c.canal_length; k>1;k--){//MOVER LOS BARCOS DEL CANAL
+        
+        //VERIFICA SI LA POSICION K ESTA VACIA PARA AVANZAR
+        if(getValue(&c.canal_list,k)==0){
+            int data=getValue(&c.canal_list,k-1);//BARCO ANTERIOR
+            
+            setValue(&c.canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
+            
+            setValue(&c.canal_list,0 , k-1);//DEJAR VACIA LA POSICION ANTERIOR
+            
+        }
+        
+        else{
+            continue;
+        }
+    }
+    
+    //METER BARCO AL CANAL
+    if(getValue(&c.canal_list,1)==0 && c.left_queue!=NULL){
+        int data=-1;
+        for (int s=0;s<=c.max_ships_queue;s++){
+            if(getValue(&c.left_queue,s)==1 ){
+                data=getValue(&c.left_queue,s);
+                setValue(&c.left_queue,0,s);
+                break;
+            }else{
+                data=-1;
+            }
+        }
+        //int data=getValue(&c.left_queue,0);
+        
+        //insertAtBeginning(&c.canal_list,data);
+        if(data!=-1){
+            printf("METE BARCO\n");
+            setValue(&c.canal_list,data , 1);
+        }
+        
+        
+        //deleteAtBeginning(&c.left_queue);
+    
+    }
+    
+    
+    for(int o = 1; o < c.canal_length+1; o++){
+        printf("CANAL[%d]: %d\n",o,getValue(&c.canal_list,o) );
+    } 
+    printf("==============================================\n");
+
+
+}
+
+void emptyLeft(struct canal c){
+    //VACIAR EL CANAL SI TODAVÍA HAY BARCOS
+    while(getValue(&c.canal_list,1)==1){
+        setValue(&c.canal_list, 0, 1);
+
+        for(int k=1; k<c.canal_length;k++){//MOVER LOS BARCOS DEL CANAL
+        
+        //VERIFICA SI LA POSICION K ESTA VACIA PARA AVANZAR
+        if(getValue(&c.canal_list,k)==0){
+            int data=getValue(&c.canal_list,k+1);//BARCO ANTERIOR
+            
+            setValue(&c.canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
+            
+            setValue(&c.canal_list,0 , k+1);//DEJAR VACIA LA POSICION ANTERIOR
+            
+        }
+        
+        else{
+            continue;
+        }
+    }
+
+        for(int o = 1; o < c.canal_length+1; o++){
+        printf("i: +w, CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
+    } 
+    printf("==============================================\n");
+
+    }
+}
+
+void emptyRight(struct canal c){
+    //VACIAR EL CANAL SI TODAVÍA HAY BARCOS
+    while(getValue(&c.canal_list,c.canal_length)==1){
+        setValue(&c.canal_list, 0, c.canal_length);
+
+        for(int k=c.canal_length; k>1;k--){//MOVER LOS BARCOS DEL CANAL
+            //VERIFICA SI LA POSICION K ESTA VACIA PARA AVANZAR
+            if(getValue(&c.canal_list,k)==0){
+                int data=getValue(&c.canal_list,k-1);//BARCO ANTERIOR
+                
+                setValue(&c.canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
+                
+                setValue(&c.canal_list,0 , k-1);//DEJAR VACIA LA POSICION ANTERIOR
+                
+            }
+            
+            else{
+                continue;
+            }
+        }
+
+        for(int o = 1; o < c.canal_length+1; o++){
+        printf("i: +w, CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
+    } 
+    printf("==============================================\n");
+
+    } 
+}
 
 void print_canal(struct canal c){
      printf("Canal info: \n");
