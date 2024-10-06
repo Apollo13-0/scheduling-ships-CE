@@ -60,31 +60,9 @@ int CEthread_create(thread_t* thread, void* (*start_routine)(void*), void* arg) 
     return 0;  // Hilo creado con éxito
 }
 
-void CEthread_end(void* retval) {
-    thread_t* thread = current_thread(); // Obtener el hilo actual
-    if (thread == NULL) {
-        _exit(1); // Si no hay hilo actual, salir con error
-    }
-
-    printf("Hilo %lu ha terminado. Estado: %d (THREAD_FINISHED)\n", thread->tid, thread->state);
-    // print return value
-    //printf("Hilo %lu ha retornado: %ld\n", thread->tid, (long)retval);
-    // Asignar el valor de retorno al hilo
-    thread->retval = retval;
-    //print thread retval
-    printf("Hilo %lu ha retornado: %ld\n", thread->tid, (long)thread->retval);
-
-    // Marcar el hilo como terminado
-    thread->state = THREAD_FINISHED;
-
-    // Liberar los recursos del hilo (como la pila) si no ha sido liberado
-    if (thread->stack != NULL) {
-        free(thread->stack);
-        thread->stack = NULL;  // Evitar doble liberación
-    }
-
-    // Salir del hilo de manera segura
-    _exit(0);  // Similar a pthread_exit, garantiza la finalización del hilo sin terminar el proceso principal
+void CEthread_end(thread_t *thread) {
+    free(thread->stack);
+    //free(thread);
 }
 
 

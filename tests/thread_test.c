@@ -8,9 +8,8 @@ void* thread_function(void* arg) {
     printf("Hilo ejecutándose con argumento: %d\n", *(int*)arg);
 
     int result = *(int*)arg + 10;  // Simular algún trabajo
-
-    // Finalizar el hilo y retornar el resultado usando CEthread_end
-    CEthread_end((void*)(long)result);  // Retorna el resultado de esta manera
+    
+    return (void*)(long)result;  // Retornar el resultado
 }
 
 int hiloTest() {
@@ -42,6 +41,9 @@ int hiloTest() {
     // Mostrar los valores de retorno de los hilos
     printf("El hilo 1 retornó: %ld\n", (long)retval);
     printf("El hilo 2 retornó: %ld\n", (long)retval2);
+
+    CEthread_end(&my_thread);
+    CEthread_end(&my_thread2);
 
     return 0;
 }
