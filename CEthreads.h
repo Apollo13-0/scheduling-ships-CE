@@ -36,7 +36,7 @@ typedef struct Mutex_t
 int CEthread_create(thread_t * thread,void *(*start_routine) (void *), void *arg);
 
 // retval: return value of the thread
-void CEthread_end(thread_t* thread);
+void CEthread_end(void *retval);
 
 // thread: thread to be joined
 // retval: return value of the thread
