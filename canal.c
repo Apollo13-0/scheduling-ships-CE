@@ -23,16 +23,18 @@ void init_canal(){
     
 
     for(int i=0; i<c.canal_length;i++){
-        insertAtBeginning(&c.canal_list,0);
+        struct Ship s ;
+        insertAtBeginning(&c.canal_list,s,0);
     }
     
     
     for(int i=0;i<c.max_ships_queue;i++){
-        insertAtBeginning(&c.right_queue,1);
-        insertAtBeginning(&c.left_queue,1);
+        struct Ship s;
+        insertAtBeginning(&c.right_queue,s,1);
+        insertAtBeginning(&c.left_queue,s,1);
     }
 
-    c.canal_flow_control= LETRERO;
+    c.canal_flow_control= TICO;
     switch(c.canal_flow_control) {
         case EQUIDAD:
             equidad(c);
@@ -381,23 +383,6 @@ void print_canal(struct canal c){
      printf("Canal info: \n");
      printf("Scheduler: \n");
     
-    switch(c.canal_scheduler) {
-        case RR:
-            printf("RR\n");
-            break;
-        case PRIORITY:
-            printf("PRIORITY\n");
-            break;
-        case SJF:
-            printf("SJF\n");
-            break;
-        case FCFS:
-            printf("FCFS\n");
-            break;
-        case REAL_TIME:
-            printf("REAL_TIME\n");
-            break;
-    }
 
     switch(c.canal_flow_control) {
         case EQUIDAD:
