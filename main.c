@@ -9,7 +9,7 @@ int main() {
     //shipTest();
     canalTest();
     //hiloTest();
-    test_schedulers();
+    //test_schedulers();
 
     return 0;
 }

@@ -1,17 +1,16 @@
 // C Program to Implement Doubly Linkede List
 #include <stdio.h>
 #include <stdlib.h>
-#include "ship.h"
 
 // defining a node
 typedef struct Node {
-    struct Ship ship;
+    int data;
     struct Node* next;
     struct Node* prev;
 } Node;
 
 // Function to create a new node with given value as data
-Node* createNode(Ship data)
+Node* createNode(int data)
 {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
@@ -21,7 +20,7 @@ Node* createNode(Ship data)
 }
 
 // Function to insert a node at the beginning
-void insertAtBeginning(Node** head, Ship data)
+void insertAtBeginning(Node** head, int data)
 {
     // creating new node
     Node* newNode = createNode(data);
@@ -37,7 +36,7 @@ void insertAtBeginning(Node** head, Ship data)
 }
 
 // Function to insert a node at the end
-void insertAtEnd(Node** head, Ship data)
+void insertAtEnd(Node** head, int data)
 {
     // creating new node
     Node* newNode = createNode(data);
@@ -57,7 +56,7 @@ void insertAtEnd(Node** head, Ship data)
 }
 
 // Function to insert a node at a specified position
-void insertAtPosition(Node** head, Ship data, int position)
+void insertAtPosition(Node** head, int data, int position)
 {
     if (position < 1) {
         printf("Position %d should be >= 1.\n",position);
@@ -214,7 +213,7 @@ int getValue(Node** head, int position)
     return temp->data;
 }
 
-void setValue(Node** head, Ship data_in, int position)
+void setValue(Node** head,int data_in, int position)
 {
     
     // Comprobar si la lista está vacía
