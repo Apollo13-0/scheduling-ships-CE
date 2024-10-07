@@ -2,6 +2,9 @@
 #include "tests/thread_test.h"
 #include "tests/mutex_test.h"
 #include "tests/config_test.h"
+#include "tests/canal_test.h"
+#include "tests/schedulers_test.h"
+
 
 
 int main() {
