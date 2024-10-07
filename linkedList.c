@@ -5,28 +5,35 @@
 
 // defining a node
 typedef struct Node {
-    struct Ship ship;
+    struct Ship data;
     struct Node* next;
     struct Node* prev;
+    int booked;
 } Node;
 
 // Function to create a new node with given value as data
-Node* createNode(Ship data)
+Node* createNode(struct Ship data, int type)
 {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
     newNode->next = NULL;
     newNode->prev = NULL;
+    if(type==1){
+        newNode-> booked=1;
+    }else{
+        newNode-> booked=0;
+    }
+    
     return newNode;
 }
 
 // Function to insert a node at the beginning
-void insertAtBeginning(Node** head, Ship data)
+void insertAtBeginning(Node** head, struct Ship data, int type)
 {
     // creating new node
-    Node* newNode = createNode(data);
+    Node* newNode = createNode(data, type);
 
-    // check if DLL is empty
+    // check if DLL is booked
     if (*head == NULL) {
         *head = newNode;
         return;
@@ -37,12 +44,12 @@ void insertAtBeginning(Node** head, Ship data)
 }
 
 // Function to insert a node at the end
-void insertAtEnd(Node** head, Ship data)
+void insertAtEnd(Node** head, struct Ship data, int type)
 {
     // creating new node
-    Node* newNode = createNode(data);
+    Node* newNode = createNode(data, type);
 
-    // check if DLL is empty
+    // check if DLL is booked
     if (*head == NULL) {
         *head = newNode;
         return;
@@ -57,7 +64,7 @@ void insertAtEnd(Node** head, Ship data)
 }
 
 // Function to insert a node at a specified position
-void insertAtPosition(Node** head, Ship data, int position)
+void insertAtPosition(Node** head, struct Ship data, int position, int type)
 {
     if (position < 1) {
         printf("Position %d should be >= 1.\n",position);
@@ -66,10 +73,10 @@ void insertAtPosition(Node** head, Ship data, int position)
 
     // if we are inserting at head
     if (position == 1) {
-        insertAtBeginning(head, data);
+        insertAtBeginning(head, data,  type);
         return;
     }
-    Node* newNode = createNode(data);
+    Node* newNode = createNode(data, type);
     Node* temp = *head;
     for (int i = 1; temp != NULL && i < position - 1; i++) {
         temp = temp->next;
@@ -90,9 +97,9 @@ void insertAtPosition(Node** head, Ship data, int position)
 // Function to delete a node from the beginning
 void deleteAtBeginning(Node** head)
 {
-    // checking if the DLL is empty
+    // checking if the DLL is booked
     if (*head == NULL) {
-        printf("The list is already empty.\n");
+        printf("The list is already booked.\n");
         return;
     }
     Node* temp = *head;
@@ -106,9 +113,9 @@ void deleteAtBeginning(Node** head)
 // Function to delete a node from the end
 void deleteAtEnd(Node** head)
 {
-    // checking if DLL is empty
+    // checking if DLL is booked
     if (*head == NULL) {
-        printf("The list is already empty.\n");
+        printf("The list is already booked.\n");
         return;
     }
 
@@ -129,7 +136,7 @@ void deleteAtEnd(Node** head)
 void deleteAtPosition(Node** head, int position)
 {
     if (*head == NULL) {
-        printf("The list is already empty.\n");
+        printf("The list is already booked.\n");
         return;
     }
     Node* temp = *head;
@@ -171,7 +178,7 @@ void printListReverse(Node* head)
 {
     Node* temp = head;
     if (temp == NULL) {
-        printf("The list is empty.\n");
+        printf("The list is booked.\n");
         return;
     }
     // Move to the end of the list
@@ -211,10 +218,10 @@ int getValue(Node** head, int position)
     }
 
     // Devolver el valor del nodo en la posición dada
-    return temp->data;
+    return temp->booked;
 }
 
-void setValue(Node** head, Ship data_in, int position)
+void setValue(Node** head, int data_in, int position)
 {
     
     // Comprobar si la lista está vacía
@@ -238,7 +245,7 @@ void setValue(Node** head, Ship data_in, int position)
     }
 
     // Devolver el valor del nodo en la posición dada
-    temp->data=data_in;
+    temp->booked=data_in;
 }
 
 int isNull(Node** head){
@@ -263,7 +270,7 @@ int noShips(Node** head)
     Node* temp = *head;
     int i;
     while(temp!=NULL){
-        if(temp->data==1){
+        if(temp->booked==1){
             return 0;
         }else{
             temp = temp->next;
