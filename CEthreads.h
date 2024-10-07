@@ -22,6 +22,11 @@ typedef struct Thread_t
     ucontext_t* ucp; 		// context of the thread
 } thread_t;  
 
+typedef struct Mutex_t
+{
+    int locked; // 0: unlocked, 1: locked
+} mutex_t;
+
 /*
 	CEthread_t: thread identifier
 	start_routine: function to be executed by the thread
