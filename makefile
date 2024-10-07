@@ -4,11 +4,11 @@ CFLAGS = -Wall -g   # Mostrar todas las advertencias y habilitar debug (-g)
 LDFLAGS =           # Flags adicionales de linkeo si son necesarios
 
 # Archivos fuente y objetos
-SRCS = main.c ship.c tests/schedulers_test.c ocean.c schedulers.c
+SRCS = main.c ship.c canal.c tests/canal_test.c tests/ship_test.c linkedList.c tests/schedulers_test.c ocean.c schedulers.c
 OBJS = $(SRCS:.c=.o)  # Cambia .c por .o para generar los archivos objeto
 
 # Nombre del ejecutable
-TARGET = main
+TARGET = scheduling_ships
 
 # Regla principal para generar el ejecutable
 $(TARGET): $(OBJS)
@@ -21,4 +21,3 @@ $(TARGET): $(OBJS)
 # Limpieza de archivos intermedios y ejecutables
 clean:
 	rm -f $(OBJS) $(TARGET)
-
