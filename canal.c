@@ -91,49 +91,52 @@ void equidad (struct canal c, int w){
 }
 
 int letrero (struct canal c,int sign_time){
-    printf("LETRERO\n");
+    printf("LETRERO TIME: %d\n",sign_time);
     //float sign_time=0.00009;//user_sign_time;
     int whi=0;
-    
+    time_t before,after,difference;
     float elapsedTime=0;
     while(whi<1){//MANTIENE EL CANAL ACTIVO
         
-        clock_t before=clock();
+        before=time(NULL);
 
         while(sign_time>elapsedTime){//MOVE RIGHT
             
             moveToRight(c,0);
-            clock_t after=clock()-before;
+            after=time(NULL);
             
-            clock_t difference=after-before;
+            difference=after-before;
             
-            elapsedTime=((float)(after))/CLOCKS_PER_SEC;
+            elapsedTime=((float)(difference));
             
         }
         
         emptyRight(c);
         before=0;
+        after=0;
         elapsedTime=0;
-        before=clock();
-        while(sign_time>=elapsedTime){//MOVE LEFT
+        before=time(NULL);
+        while(sign_time>elapsedTime){//MOVE LEFT
             moveToLeft(c,0);
-            clock_t after=clock()-before;
+            after=time(NULL);
             
-            clock_t difference=after-before;
+            difference=after-before;
 
             
-            elapsedTime=((double)(after))/CLOCKS_PER_SEC;
+            elapsedTime=((double)(difference));
 
 
         }
         emptyLeft(c);
+        before=0;
+        after=0;
+        elapsedTime=0;
 
 
 
         
         whi++;
     }
-
 
 
     return 0;   

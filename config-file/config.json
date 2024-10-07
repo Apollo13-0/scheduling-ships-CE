@@ -1,8 +1,8 @@
 {
-    "controlMethod": "EQUIDAD",
+    "controlMethod": "LETRERO",
     "canalLength": 8,
     "shipSpeed": 20,
     "amountShipsInQ": 5,
-    "controlSignTime": 10,
+    "controlSignTime": 2,
     "W": 3
 }
