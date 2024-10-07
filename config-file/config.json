@@ -1,8 +1,8 @@
 {
-    "controlMethod": "TICO",
-    "canalLength": 1000,
+    "controlMethod": "EQUIDAD",
+    "canalLength": 8,
     "shipSpeed": 20,
     "amountShipsInQ": 5,
     "controlSignTime": 10,
-    "W": 15
+    "W": 3
 }

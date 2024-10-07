@@ -3,7 +3,7 @@
 
 void canalTest() {
 
-    struct canal canal1 = {RR, TICO,10,5};
+    struct canal canal1 = {TICO,10,5};
     
     init_canal();
 }

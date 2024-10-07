@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "ship.h"
 #include <time.h>
+#include "config-file/config.h"
 
 
 /*
@@ -13,13 +14,14 @@
 */
 
 void init_canal(){
-
+     UserData* userData = NULL;
+    userData=initUserData();
     struct canal c;
-    c.canal_length= 5;
+    c.canal_length=userData->canalLength;//c.canal_length= 5;
     c.canal_list=NULL;
     c.right_queue=NULL;
     c.left_queue=NULL;
-    c.max_ships_queue=3;
+    c.max_ships_queue=userData->amountShipsInQ;//c.max_ships_queue=3;
     
 
     for(int i=0; i<c.canal_length;i++){
@@ -33,38 +35,37 @@ void init_canal(){
         insertAtBeginning(&c.right_queue,s,1);
         insertAtBeginning(&c.left_queue,s,1);
     }
-
-    c.canal_flow_control= TICO;
-    switch(c.canal_flow_control) {
-        case EQUIDAD:
-            equidad(c);
-            break;
-        case LETRERO:
-            letrero(c);
-            break;
-        case TICO:
-            tico(c);
-            break;
+    //strcpy(userData->controlMethod, controlMethod->valuestring);
+    //c.canal_flow_control=userData->controlMethod;//
+    
+    if (strcmp(userData->controlMethod, "EQUIDAD") == 0) {
+        c.canal_flow_control= EQUIDAD;
+        equidad(c,userData->W);
+    } else if (strcmp(userData->controlMethod, "LETRERO") == 0) {
+        c.canal_flow_control= LETRERO;
+        letrero(c,userData->controlSignTime);
+    }else if (strcmp(userData->controlMethod, "TICO") == 0) {
+        c.canal_flow_control= TICO;
+        tico(c);
+        
+    }else{
+        printf("NO VALID CONTROL METHOD \n");
     }
-    /*c.canal_scheduler= user_canal_scheduler;
-    
-    
-    */
     
 }
 
 
-void equidad (struct canal c){
-    printf("EQUIDAD\n");
-    int w=5;
+void equidad (struct canal c, int w){
+    printf("EQUIDAD W: %d\n",w);
+    //int w=5;
     int whi=0;
     //======================= 1er for izq der, der izq 
-    while(whi<1){//while que mantiene vivo el canal
+    while(whi<2){//while que mantiene vivo el canal
 
         //==============================  LEFT------RIGHT=========================
         for(int i=0; i<w;i++){
            //VERIFICA SI EL ULTIMO ES 1
-            moveToRight(c);
+            moveToRight(c,0);
             
         }
         emptyRight(c);
@@ -72,7 +73,7 @@ void equidad (struct canal c){
         //==============================  RIGHT------LEFT=========================
         printf("\n==================== CAMBIA DE DIRECCION ================\n");
         for(int i=0; i<w;i++){
-           moveToLeft(c);
+           moveToLeft(c,0);
             
         }
         emptyLeft(c);
@@ -89,9 +90,9 @@ void equidad (struct canal c){
     return 0;   
 }
 
-int letrero (struct canal c){
+int letrero (struct canal c,int sign_time){
     printf("LETRERO\n");
-    float sign_time=0.00009;//user_sign_time;
+    //float sign_time=0.00009;//user_sign_time;
     int whi=0;
     
     float elapsedTime=0;
@@ -101,7 +102,7 @@ int letrero (struct canal c){
 
         while(sign_time>elapsedTime){//MOVE RIGHT
             
-            moveToRight(c);
+            moveToRight(c,0);
             clock_t after=clock()-before;
             
             clock_t difference=after-before;
@@ -115,7 +116,7 @@ int letrero (struct canal c){
         elapsedTime=0;
         before=clock();
         while(sign_time>=elapsedTime){//MOVE LEFT
-            moveToLeft(c);
+            moveToLeft(c,0);
             clock_t after=clock()-before;
             
             clock_t difference=after-before;
@@ -161,7 +162,7 @@ int tico (struct canal c){
                 emptyLeft(c);
                 break;
             }
-            moveToLeft(c);
+            moveToLeft(c,0);
             
 
         }
@@ -181,7 +182,7 @@ int tico (struct canal c){
                 emptyRight(c);
                 break;
             }
-            moveToRight(c);
+            moveToRight(c,0);
             
 
         }
@@ -206,7 +207,7 @@ int tico (struct canal c){
                 emptyRight(c);
                 break;
             }
-            moveToRight(c);
+            moveToRight(c,0);
             
             
 
@@ -227,7 +228,7 @@ int tico (struct canal c){
                 emptyLeft(c);
                 break;
             }
-            moveToLeft(c);
+            moveToLeft(c,0);
             
 
         }
@@ -238,7 +239,7 @@ int tico (struct canal c){
 }
 
 
-void moveToLeft(struct canal c){
+void moveToLeft(struct canal c, int vaciando){
     //VERIFICA SI EL ULTIMO ES 1
     if(getValue(&c.canal_list,1)==1){
         setValue(&c.canal_list, 0, 1);
@@ -261,7 +262,7 @@ void moveToLeft(struct canal c){
         }
     }
     //METER BARCO AL CANAL
-    if(getValue(&c.canal_list,c.canal_length)==0 && c.right_queue!=NULL){
+    if(getValue(&c.canal_list,c.canal_length)==0 && c.right_queue!=NULL && vaciando!=1){
         int data=-1;
         for (int s=1;s<=c.max_ships_queue;s++){
             if(getValue(&c.right_queue,s)==1 ){
@@ -287,7 +288,7 @@ void moveToLeft(struct canal c){
 
 
 }
-void moveToRight(struct canal c){
+void moveToRight(struct canal c,int vaciando){
     if(getValue(&c.canal_list,c.canal_length)==1){
         setValue(&c.canal_list, 0, c.canal_length);
     } 
@@ -310,7 +311,7 @@ void moveToRight(struct canal c){
     }
     
     //METER BARCO AL CANAL
-    if(getValue(&c.canal_list,1)==0 && c.left_queue!=NULL){
+    if(getValue(&c.canal_list,1)==0 && c.left_queue!=NULL && vaciando!=1){
         int data=-1;
         for (int s=0;s<=c.max_ships_queue;s++){
             if(getValue(&c.left_queue,s)==1 ){
@@ -353,7 +354,7 @@ void emptyLeft(struct canal c){
             if(data==-1){
                 break;
             }
-            moveToLeft(c);
+            moveToLeft(c,1);
 
         }
 }
@@ -374,7 +375,7 @@ void emptyRight(struct canal c){
             if(data==-1){
                 break;
             }
-            moveToRight(c);
+            moveToRight(c,1);
 
         }
 }

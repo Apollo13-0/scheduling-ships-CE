@@ -12,7 +12,7 @@ int main() {
     //shipTest();
     //hiloTest();
     //mutexTest();
-    configTest();
+    //configTest();
     canalTest();
     //test_schedulers();
 
