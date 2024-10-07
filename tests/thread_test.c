@@ -50,11 +50,11 @@ int hiloTest() {
 
     // Liberar la memoria de la pila y el contexto
     free(my_thread.stack);
-    free(my_thread.ucp);
+    //free(my_thread.ucp);
     free(my_thread2.stack);
-    free(my_thread2.ucp);
+    //free(my_thread2.ucp);
     free(my_thread3.stack);
-    free(my_thread3.ucp);
+    //free(my_thread3.ucp);
 
 
     return 0;
