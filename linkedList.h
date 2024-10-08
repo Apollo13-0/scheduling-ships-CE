@@ -47,4 +47,5 @@ void printListReverse(Node* head);
 int getValue(Node** head, int position);
 void setValue(Node** head, int data_in, int position);
 struct Ship getShip(Node** head, int position);
+void setShip(Node** head, struct Ship ship, int position);
 #endif  // LINKEDLIST_H

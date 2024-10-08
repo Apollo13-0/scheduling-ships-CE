@@ -285,7 +285,6 @@ int noShips(Node** head)
 
 struct Ship getShip(Node** head, int position)
 {
-    
     // Comprobar si la lista está vacía
     if (*head == NULL) {
         printf("La lista está vacía.\n");
@@ -312,3 +311,30 @@ struct Ship getShip(Node** head, int position)
     return temp->data;
 }
 
+
+void setShip(Node** head, struct Ship ship, int position)
+{
+    
+    // Comprobar si la lista está vacía
+    if (*head == NULL) {
+        printf("La lista está vacía.\n");
+        return -1;  // Valor de error, puede ser personalizado
+    }
+
+    Node* temp = *head;
+    int i;
+
+    // Recorrer la lista hasta llegar a la posición
+    for (i = 1; temp != NULL && i < position; i++) {
+        temp = temp->next;
+    }
+
+    // Comprobar si la posición es válida
+    if (temp == NULL) {
+        printf("La posición %d no existe en la lista.\n", position);
+        return -1;  // Valor de error, puede ser personalizado
+    }
+
+    // Devolver el valor del nodo en la posición dada
+    temp->data=ship;
+}
