@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include "ship.h"
 
-// defining a node
+/* defining a node
 typedef struct Node {
     struct Ship data;
     struct Node* next;
     struct Node* prev;
     int booked;
-} Node;
+} Node;*/
 
 // Function to create a new node with given value as data
 Node* createNode(struct Ship data, int type)
