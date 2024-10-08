@@ -1,3 +1,7 @@
+
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
+
 // C Program to Implement Doubly Linkede List
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,7 +9,7 @@
 
 // defining a node
 typedef struct Node {
-    struct Ship ship; 
+    struct Ship data; 
     int booked;
     struct Node* next;
     struct Node* prev;
@@ -20,11 +24,11 @@ void insertAtBeginning(Node** head, struct Ship data, int type);
 
 
 // Function to insert a node at the end
-void insertAtEnd(Node** head, struct Ship data);
+void insertAtEnd(Node** head, struct Ship data, int type);
 
 
 // Function to insert a node at a specified position
-void insertAtPosition(Node** head, struct Ship data, int position);
+void insertAtPosition(Node** head, struct Ship data, int position, int type);
 // Function to delete a node from the beginning
 void deleteAtBeginning(Node** head);
 
@@ -42,3 +46,4 @@ void printListReverse(Node* head);
 
 int getValue(Node** head, int position);
 void setValue(Node** head, int data_in, int position);
+#endif  // LINKEDLIST_H

@@ -1,61 +1,47 @@
 #include "schedulers_test.h"
 #include <stdio.h>
 
-int test_schedulers() {
-    // Ocean on the left side
-    struct Ocean leftOcean;
-    leftOcean.numShips = 0;
-    leftOcean.canalLength = 100;
-    leftOcean.canalCapacity = 5;
-    leftOcean.side = 0;  // Left ocean (0)
+// Función para probar los algoritmos de calendarización
+void test_schedulers() {
+    // Crear un océano para la prueba
+    struct Ocean ocean;
+    ocean.numShips = 0;
+    ocean.canalLength = 100;
+    ocean.canalCapacity = 5;
+    ocean.side = 0;  // Lado izquierdo (0)
 
-    // Ocean on the right side
-    struct Ocean rightOcean;
-    rightOcean.numShips = 0;
-    rightOcean.canalLength = 100;
-    rightOcean.canalCapacity = 5;
-    rightOcean.side = 1;  // Right ocean (1)
+    // Crear algunos barcos para las pruebas
+    struct Ship ship1 = {NORMAL, 10, 1};    // Barco normal, velocidad 10, prioridad 1
+    struct Ship ship2 = {PESQUERO, 20, 2};   // Barco pesquero, velocidad 20, prioridad 2
+    struct Ship ship3 = {PATRULLA, 30, 3};    // Barco patrulla, velocidad 30, prioridad 3
 
-    struct Ship ship1 = {NORMAL, 10, 1};
-    struct Ship ship2 = {PESQUERO, 20, 2};
-    struct Ship ship3 = {PATRULLA, 30, 3};
-    struct Ship ship4 = {PATRULLA, 30, 3};
+    // Agregar los barcos al océano (usa la lista enlazada)
+    addShip(&ocean, ship1);
+    addShip(&ocean, ship2);
+    addShip(&ocean, ship3);
 
+    // Probar el algoritmo FCFS
+    printf("Testing FCFS:\n");
+    Node* fcfsResult = fcfs(&ocean);
+    printListForward(fcfsResult);  // Imprimir los barcos en el orden FCFS
 
-    // Adding ships to the left ocean
-    addShip(&leftOcean, ship1);
-    addShip(&leftOcean, ship2);
-    addShip(&leftOcean, ship3);
+    // Probar el algoritmo Round Robin con quantum = 2
+    printf("\nTesting Round Robin (quantum = 2):\n");
+    Node* rrResult = roundRobin(&ocean, 2);
+    printListForward(rrResult);  // Imprimir los barcos en el orden de Round Robin
 
-    // Adding ships to the right ocean
-    addShip(&rightOcean, ship1);
-    addShip(&rightOcean, ship2);
-    addShip(&rightOcean, ship3);
-    addShip(&rightOcean, ship4);
+    // Probar el algoritmo SJF (Shortest Job First)
+    printf("\nTesting SJF:\n");
+    Node* sjfResult = sjf(&ocean);
+    printListForward(sjfResult);  // Imprimir los barcos en el orden de SJF
 
+    // Probar el algoritmo de Prioridad
+    printf("\nTesting Priority:\n");
+    Node* priorityResult = priorityScheduler(&ocean);
+    printListForward(priorityResult);  // Imprimir los barcos en el orden de Prioridad
 
-
-    //Se escoge que usar en que oceano
-    //printf("FCFS:\n");
-    //fcfs(&leftOcean);
-    //fcfs(&rightOcean);
-
-    printf("\nRound Robin (quantum = 10):\n");
-    roundRobin(&rightOcean, 10);
-
-    //printf("\nSJF:\n");
-    //sjf(&leftOcean);
-    //sjf(&rightOcean);
-
-    //printf("\nPriority:\n");
-    //priorityScheduler(&rightOcean);
-    //priorityScheduler(&leftOcean);
-
-
-    //printf("\nReal-Time (maxTime = 5):\n");
-    //realTime(&leftOcean, 5);
-    //realTime(&rightOcean, 5);
-
-
-    return 0;
+    // Probar el algoritmo Tiempo Real (Real-Time) con maxTime = 5
+    printf("\nTesting Real-Time (maxTime = 5):\n");
+    Node* realTimeResult = realTime(&ocean, 5);
+    printListForward(realTimeResult);  // Imprimir los barcos en el orden de Tiempo Real
 }

@@ -2,20 +2,13 @@
 #define SCHEDULERS_H
 
 #include "ocean.h"
+//#include "linkedList.h"
 
-// First Come First Serve
-void fcfs(struct Ocean *ocean);
-
-// Round Robin
-void roundRobin(struct Ocean *ocean, int quantum);
-
-// Shortest Job First
-void sjf(struct Ocean *ocean);
-
-// Priority
-void priorityScheduler(struct Ocean *ocean);
-
-// Real-Time (Para patrullas)
-void realTime(struct Ocean *ocean, int maxTime);
+// Declaración de los algoritmos de calendarización
+Node* fcfs(struct Ocean *ocean);
+Node* roundRobin(struct Ocean *ocean, int quantum);
+Node* sjf(struct Ocean *ocean);
+Node* priorityScheduler(struct Ocean *ocean);
+Node* realTime(struct Ocean *ocean, int maxTime);
 
 #endif // SCHEDULERS_H

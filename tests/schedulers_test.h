@@ -3,4 +3,4 @@
 #include "../ocean.h"
 #include "../schedulers.h"
 
-int test_schedulers();
+void test_schedulers();

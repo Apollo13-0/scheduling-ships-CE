@@ -2,14 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ship.h"
+#include "linkedList.h"
 
 // defining a node
-typedef struct Node {
+/*typedef struct Node {
     struct Ship data;
     struct Node* next;
     struct Node* prev;
     int booked;
-} Node;
+} Node;*/
 
 // Function to create a new node with given value as data
 Node* createNode(struct Ship data, int type)

@@ -1,102 +1,143 @@
 #include "schedulers.h"
+#include "linkedList.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-void fcfs(struct Ocean *ocean) {
-    const char *sideStr = (ocean->side == 0) ? "Left" : "Right";
-    printf("FCFS order from the %s ocean:\n", sideStr);
-    for (int i = 0; i < ocean->numShips; i++) {
-        printShip(ocean->ships[i]);
-    }
+/////////////////////////////////////////////////////////////
+// First Come First Serve (FCFS)
+/////////////////////////////////////////////////////////////
+Node* fcfs(struct Ocean *ocean) {
+    printf("FCFS order:\n");
+
+    // Dado que no se altera el orden, retornamos la lista tal como está
+    return ocean->ships;
 }
 
-void roundRobin(struct Ocean *ocean, int quantum) {
+/////////////////////////////////////////////////////////////
+// Round Robin
+/////////////////////////////////////////////////////////////
+Node* roundRobin(struct Ocean *ocean, int quantum) {
     printf("Round Robin order (quantum = %d):\n", quantum);
     
-    int remainingShips = ocean->numShips;           // Número de barcos pendientes por cruzar
-    int *remainingTime = malloc(ocean->numShips * sizeof(int));  // Tiempo restante de cada barco
+    Node* current = ocean->ships;
+    Node* orderedList = NULL;  // Nueva lista para los barcos en el orden de cruce
+    
+    while (current != NULL) {
+        if (current->booked == 1) {
+            int timeToUse = (current->data.speed > quantum) ? quantum : current->data.speed;
+            printf("Ship crosses for %d time units\n", timeToUse);
+            current->data.speed -= timeToUse;
 
-    // Inicializar el tiempo restante para cada barco (igual a la velocidad, que sería el "trabajo total")
-    for (int i = 0; i < ocean->numShips; i++) {
-        remainingTime[i] = ocean->ships[i].speed;  // Usamos "speed" como el tiempo que toma cruzar el canal
-    }
+            // Insertar barco en la lista de salida ordenada
+            insertAtEnd(&orderedList, current->data, 1);
 
-    // Mientras haya barcos que necesiten cruzar
-    while (remainingShips > 0) {
-        //Recorremos todos los barcos
-        for (int i = 0; i < ocean->numShips; i++) {
-            if (remainingTime[i] > 0) {  //Si el barco aún tiene tiempo pendiente (aún no ha terminado de cruzar)
-                
-                // Se decide cuánto tiempo le vamos a dar al barco, puede ser el quantum completo o el tiempo restante
-                int timeToUse = (remainingTime[i] > quantum) ? quantum : remainingTime[i];
-
-                //El barco "utiliza" su tiempo para cruzar el canal
-                printf("Ship #%d crosses for %d time units\n", i + 1, timeToUse);
-                
-                //Reducimos el tiempo restante de ese barco
-                remainingTime[i] -= timeToUse;
-
-                // **Cambio de contexto:** Aquí es donde se hace el cambio, porque después de este punto,
-                // otro barco puede empezar a cruzar, ya que hemos "pausado" el cruce de este barco.
-                // Si no ha terminado, tendrá que esperar a su siguiente turno.
-                
-                if (remainingTime[i] == 0) {  // Si el barco terminó de cruzar
-                    remainingShips--;  // Decrementamos el número de barcos restantes
-                    printf("Ship #%d has finished crossing\n", i + 1);
-                }
-                
-                // **Cambio de contexto:** Después de esta iteración, se pasa al siguiente barco
-                // en la lista (i.e., el siguiente proceso en ejecución).
+            if (current->data.speed <= 0) {
+                printf("Ship has finished crossing\n");
             }
         }
+        current = current->next;
     }
 
-    // Liberamos la memoria usada para el tiempo restante
-    free(remainingTime);
+    return orderedList;  // Retornar la lista ordenada
 }
 
-int compareBySpeed(const void *a, const void *b) {
-    struct Ship *shipA = (struct Ship *)a;
-    struct Ship *shipB = (struct Ship *)b;
-    return shipA->speed - shipB->speed;
-}
+/////////////////////////////////////////////////////////////
+// Shortest Job First (SJF)
+/////////////////////////////////////////////////////////////
 
-void sjf(struct Ocean *ocean) {
-    const char *sideStr = (ocean->side == 0) ? "Left" : "Right";
-    printf("SJF order from the %s ocean (Shortest Job First):\n", sideStr);
-    qsort(ocean->ships, ocean->numShips, sizeof(struct Ship), compareBySpeed);
-    for (int i = 0; i < ocean->numShips; i++) {
-        printShip(ocean->ships[i]);
-    }
-}
+// Función auxiliar para insertar barcos en orden de velocidad
+void insertInOrder(Node** head, struct Ship ship) {
+    Node* current;
+    Node* newNode = createNode(ship, 1);
 
-int compareByPriority(const void *a, const void *b) {
-    struct Ship *shipA = (struct Ship *)a;
-    struct Ship *shipB = (struct Ship *)b;
-    return shipB->priority - shipA->priority;
-}
-
-void priorityScheduler(struct Ocean *ocean) {
-    const char *sideStr = (ocean->side == 0) ? "Left" : "Right";
-    printf("Priority order from the %s ocean:\n", sideStr);
-    qsort(ocean->ships, ocean->numShips, sizeof(struct Ship), compareByPriority);
-    for (int i = 0; i < ocean->numShips; i++) {
-        printShip(ocean->ships[i]);
+    // Si la lista está vacía o el nuevo nodo es menor que el primero
+    if (*head == NULL || (*head)->data.speed >= ship.speed) {
+        newNode->next = *head;
+        *head = newNode;
+    } else {
+        current = *head;
+        while (current->next != NULL && current->next->data.speed < ship.speed) {
+            current = current->next;
+        }
+        newNode->next = current->next;
+        current->next = newNode;
     }
 }
 
-void realTime(struct Ocean *ocean, int maxTime) {
-    const char *sideStr = (ocean->side == 0) ? "Left" : "Right";
-    printf("Real-Time order from the %s ocean (maxTime = %d):\n", sideStr, maxTime);
-    for (int i = 0; i < ocean->numShips; i++) {
-        if (ocean->ships[i].type == PATRULLA) {
-            if (ocean->ships[i].speed <= maxTime) {
-                printf("Patrol ship #%d from the %s ocean crosses in %d time units\n", i + 1, sideStr, ocean->ships[i].speed);
+Node* sjf(struct Ocean *ocean) {
+    printf("SJF order (Shortest Job First):\n");
+
+    Node* current = ocean->ships;
+    Node* orderedList = NULL;  // Nueva lista enlazada para almacenar el orden SJF
+
+    // Insertar cada barco en la lista ordenada por velocidad
+    while (current != NULL) {
+        insertInOrder(&orderedList, current->data);
+        current = current->next;
+    }
+
+    return orderedList;  // Retornar la lista enlazada ordenada por SJF
+}
+
+/////////////////////////////////////////////////////////////
+// Prioridad
+/////////////////////////////////////////////////////////////
+
+// Función auxiliar para insertar barcos en orden de prioridad
+void insertByPriority(Node** head, struct Ship ship) {
+    Node* current;
+    Node* newNode = createNode(ship, 1);
+
+    // Si la lista está vacía o el nuevo nodo tiene mayor prioridad
+    if (*head == NULL || (*head)->data.priority <= ship.priority) {
+        newNode->next = *head;
+        *head = newNode;
+    } else {
+        current = *head;
+        while (current->next != NULL && current->next->data.priority > ship.priority) {
+            current = current->next;
+        }
+        newNode->next = current->next;
+        current->next = newNode;
+    }
+}
+
+Node* priorityScheduler(struct Ocean *ocean) {
+    printf("Priority order:\n");
+
+    Node* current = ocean->ships;
+    Node* orderedList = NULL;  // Nueva lista enlazada para almacenar el orden por prioridad
+
+    // Insertar cada barco en la lista según su prioridad
+    while (current != NULL) {
+        insertByPriority(&orderedList, current->data);
+        current = current->next;
+    }
+
+    return orderedList;  // Retornar la lista enlazada ordenada por prioridad
+}
+
+/////////////////////////////////////////////////////////////
+// Tiempo Real (Real-Time Scheduler)
+/////////////////////////////////////////////////////////////
+Node* realTime(struct Ocean *ocean, int maxTime) {
+    printf("Real-Time order (maxTime = %d):\n", maxTime);
+
+    Node* current = ocean->ships;
+    Node* orderedList = NULL;  // Lista para barcos de tiempo real
+
+    // Recorrer todos los barcos y filtrar los de patrulla
+    while (current != NULL) {
+        if (current->data.type == PATRULLA && current->booked == 1) {
+            if (current->data.speed <= maxTime) {
+                printf("Patrol ship crosses in %d time units\n", current->data.speed);
+                insertAtEnd(&orderedList, current->data, 1);
             } else {
-                printf("Warning: Patrol ship #%d from the %s ocean cannot cross within the maximum time\n", i + 1, sideStr);
+                printf("Warning: Patrol ship cannot cross within the maximum time\n");
             }
-        } else {
-            printf("Ship #%d from the %s ocean is not a patrol ship, ignored by real-time scheduler\n", i + 1, sideStr);
         }
+        current = current->next;
     }
+
+    return orderedList;  // Retornar la lista enlazada con los barcos que cumplieron
 }

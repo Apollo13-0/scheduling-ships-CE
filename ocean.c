@@ -1,27 +1,26 @@
 #include "ocean.h"
+#include "linkedList.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-//Añadir barco
+// Agregar un barco a la lista enlazada del océano
 void addShip(struct Ocean *ocean, struct Ship ship) {
+    // Insertar al final de la lista enlazada y marcar el nodo como "booked" (1)
+    insertAtEnd(&(ocean->ships), ship, 1);  
     ocean->numShips++;
-    ocean->ships = realloc(ocean->ships, ocean->numShips * sizeof(struct Ship));
-    ocean->ships[ocean->numShips - 1] = ship;
 }
 
-//Quitar barco
+// Eliminar un barco desde el inicio de la lista enlazada
 void removeShip(struct Ocean *ocean) {
     if (ocean->numShips > 0) {
+        deleteAtBeginning(&(ocean->ships));  // Eliminar el primer barco de la lista enlazada
         ocean->numShips--;
-        ocean->ships = realloc(ocean->ships, ocean->numShips * sizeof(struct Ship));
     }
 }
 
-//Imprimir los barcos que hay en cada oceano
+// Imprimir los barcos del océano usando la lista enlazada
 void printOcean(struct Ocean ocean) {
     const char *sideStr = (ocean.side == 0) ? "Left" : "Right";
     printf("Ocean Side: %s\n", sideStr);
-    for (int i = 0; i < ocean.numShips; i++) {
-        printShip(ocean.ships[i]);
-    }
+    printListForward(ocean.ships);  // Usar la función para imprimir la lista enlazada
 }

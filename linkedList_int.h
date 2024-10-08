@@ -1,3 +1,6 @@
+#ifndef LINKEDLIST_INT_H
+#define LINKEDLIST_INT_H
+
 // C Program to Implement Doubly Linkede List
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,3 +41,5 @@ void printListForward(Node* head);
 void printListReverse(Node* head);
 
 int getValue(Node** head, int position);
+
+#endif  // LINKEDLIST_INT_H
