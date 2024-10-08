@@ -1,6 +1,6 @@
 {
-    "controlMethod": "LETRERO",
-    "shceduler": "SJF",
+    "controlMethod": "TICO",
+    "scheduler": "SJF",
     "canalLength": 8,
     "shipSpeed": 20,
     "amountShipsInQ": 5,

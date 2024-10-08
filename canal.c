@@ -32,27 +32,39 @@ void init_canal(){
     
 
     struct Ocean leftO;
-    struct Ocean rigtO;
+    struct Ocean rightO;
     leftO.side=0;
     rightO.side=1;
-    if (strcmp(userData->scheduler, "EQUIDAD") == 0) {
+    
+    if (strcmp(userData->scheduler, "FCFS") == 0) {
+        c.right_queue=fcfs(&rightO);
+        c.left_queue=fcfs(&leftO);
+    } else if (strcmp(userData->scheduler, "RR") == 0) {
+        c.right_queue=roundRobin(&rightO,10);
+        c.left_queue=roundRobin(&leftO,10);
+    }else if (strcmp(userData->scheduler, "SJF") == 0) {
+        printf("SJF\n");
+        c.right_queue=sjf(&rightO);
+        c.left_queue=sjf(&leftO);
         
-        equidad(c,userData->W);
-    } else if (strcmp(userData->scheduler, "LETRERO") == 0) {
+    }else if (strcmp(userData->scheduler, "PRIORITY") == 0) {
+        c.right_queue=priorityScheduler(&rightO);
+        c.left_queue=priorityScheduler(&leftO);
         
-        letrero(c,userData->controlSignTime);
-    }else if (strcmp(userData->scheduler, "TICO") == 0) {
+    }else if (strcmp(userData->scheduler, "RT") == 0) {
+        c.right_queue=realTime(&rightO,5);
+        c.left_queue=realTime(&leftO,5);
         
-        tico(c);
-        
-    }else{
-        printf("NO VALID CONTROL METHOD \n");
+    }
+    else{
+        printf("NO VALID SHEDULER \n");
     }
 
 
 
 
     for(int i=0;i<c.max_ships_queue;i++){
+        
         struct Ship s;
         insertAtBeginning(&c.right_queue,s,1);
         insertAtBeginning(&c.left_queue,s,1);
@@ -307,7 +319,10 @@ void moveToLeft(struct canal c, int vaciando){
     
     
     for(int o = 1; o < c.canal_length+1; o++){
-        printf("CANAL[%d]: %d\n", o,getValue(&c.canal_list,o) );
+        printf("CANAL[%d]: %d --> ", o,getValue(&c.canal_list,o) );
+        struct Ship s =getShip(&c.canal_list,o);
+        printf("TIPO: %s  PRIORIDAD: %d\n",s.type, s.priority);
+        //printShip(getShip(&c.canal_list,o));
     } 
     printf("==============================================\n");
 
@@ -356,7 +371,10 @@ void moveToRight(struct canal c,int vaciando){
     
     
     for(int o = 1; o < c.canal_length+1; o++){
-        printf("CANAL[%d]: %d\n",o,getValue(&c.canal_list,o) );
+        printf("CANAL[%d]: %d",o,getValue(&c.canal_list,o) );
+        struct Ship s =getShip(&c.canal_list,o);
+        printf("TIPO: %s  PRIORIDAD: %d\n",s.type, s.priority);
+        //printShip(getShip(&c.canal_list,o));
     } 
     printf("==============================================\n");
 
