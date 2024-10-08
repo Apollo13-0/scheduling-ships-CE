@@ -4,6 +4,7 @@
 #include "ship.h"
 #include <time.h>
 #include "config-file/config.h"
+#include "schedulers.h"
 
 
 /*
@@ -29,7 +30,28 @@ void init_canal(){
         insertAtBeginning(&c.canal_list,s,0);
     }
     
-    
+
+    struct Ocean leftO;
+    struct Ocean rigtO;
+    leftO.side=0;
+    rightO.side=1;
+    if (strcmp(userData->scheduler, "EQUIDAD") == 0) {
+        
+        equidad(c,userData->W);
+    } else if (strcmp(userData->scheduler, "LETRERO") == 0) {
+        
+        letrero(c,userData->controlSignTime);
+    }else if (strcmp(userData->scheduler, "TICO") == 0) {
+        
+        tico(c);
+        
+    }else{
+        printf("NO VALID CONTROL METHOD \n");
+    }
+
+
+
+
     for(int i=0;i<c.max_ships_queue;i++){
         struct Ship s;
         insertAtBeginning(&c.right_queue,s,1);

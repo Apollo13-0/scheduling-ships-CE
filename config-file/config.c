@@ -47,6 +47,7 @@ UserData* initUserData() {
 
     // Acceder a los datos JSON 
     cJSON *controlMethod = cJSON_GetObjectItemCaseSensitive(json, "controlMethod"); 
+    cJSON *scheduler = cJSON_GetObjectItemCaseSensitive(json, "scheduler");
     cJSON *canalLength = cJSON_GetObjectItemCaseSensitive(json, "canalLength");
     cJSON *shipSpeed = cJSON_GetObjectItemCaseSensitive(json, "shipSpeed");
     cJSON *amountShipsInQ = cJSON_GetObjectItemCaseSensitive(json, "amountShipsInQ");
@@ -61,6 +62,16 @@ UserData* initUserData() {
         }
     } else {
         userData->controlMethod = NULL; // Manejar el caso en que no sea una cadena válida
+    }
+
+    // Asignar el calendarizador
+    if (cJSON_IsString(scheduler) && (scheduler->valuestring != NULL)) {
+        userData->scheduler = malloc(strlen(scheduler->valuestring) + 1);
+        if (userData->scheduler != NULL) {
+            strcpy(userData->scheduler, scheduler->valuestring);
+        }
+    } else {
+        userData->scheduler = NULL; // Manejar el caso en que no sea una cadena válida
     }
 
     // Asignar los valores restantes
@@ -82,6 +93,7 @@ void printUserData() {
         return;
     }
     printf("Control Method: %s\n", userData->controlMethod ? userData->controlMethod : "NULL");
+    printf("Scheduler: %s\n", userData->scheduler ? userData->scheduler : "NULL");
     printf("Canal Length: %d\n", userData->canalLength);
     printf("Ship Speed: %d\n", userData->shipSpeed);
     printf("Amount of Ships in Queue: %d\n", userData->amountShipsInQ);
@@ -92,6 +104,8 @@ void printUserData() {
 void freeUserData() {
     if (userData != NULL) {
         free(userData->controlMethod); // Liberar la memoria del controlMethod
+        free(userData->scheduler); // Liberar la memoria del scheduler
+
         free(userData); // Liberar la memoria del UserData
         userData = NULL; // Establecer a NULL para evitar acceso posterior
     }

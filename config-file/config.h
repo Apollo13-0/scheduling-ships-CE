@@ -4,7 +4,8 @@
 // sudo apt install libcjson1 libcjson-dev
 
 typedef struct userData {
-    char* controlMethod;  // Método de control de flujo
+    char* controlMethod;    // Método de control de flujo
+    char* scheduler;        // Calendarizador para oceanos
     int canalLength;        // Largo del canal en metros
     int shipSpeed;          // Velocidad del barco en m/s
     int amountShipsInQ;     // Cantidad de barcos en la cola
