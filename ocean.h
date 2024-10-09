@@ -7,8 +7,6 @@
 struct Ocean {
     Node* ships;    // Lista enlazada de barcos
     int numShips;   // Número de barcos esperando
-    int canalLength; // Longitud del canal
-    int canalCapacity; // Capacidad del canal
     int side;       // 0 = Left ocean, 1 = Right ocean
 };
 
