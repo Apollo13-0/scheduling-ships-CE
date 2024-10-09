@@ -46,16 +46,17 @@ Node* roundRobin(struct Ocean *ocean, int quantum) {
 /////////////////////////////////////////////////////////////
 
 // Función auxiliar para insertar barcos en orden de velocidad
-void insertInOrder(Node** head, struct Ship ship) {
+void insertInOrder(Node* head, struct Ship ship) {
     Node* current;
     Node* newNode = createNode(ship, 1);
+    
 
     // Si la lista está vacía o el nuevo nodo es menor que el primero
-    if (*head == NULL || (*head)->data.speed >= ship.speed) {
-        newNode->next = *head;
-        *head = newNode;
+    if (head == NULL || (head)->data.speed >= ship.speed) {
+        newNode->next = head;
+        head = newNode;
     } else {
-        current = *head;
+        current = head;
         while (current->next != NULL && current->next->data.speed < ship.speed) {
             current = current->next;
         }
@@ -68,11 +69,11 @@ Node* sjf(struct Ocean *ocean) {
     printf("SJF order (Shortest Job First):\n");
 
     Node* current = ocean->ships;
-    Node* orderedList = NULL;  // Nueva lista enlazada para almacenar el orden SJF
+    Node* orderedList;  // Nueva lista enlazada para almacenar el orden SJF
 
     // Insertar cada barco en la lista ordenada por velocidad
     while (current != NULL) {
-        insertInOrder(&orderedList, current->data);
+        insertInOrder(orderedList, current->data);
         current = current->next;
     }
 

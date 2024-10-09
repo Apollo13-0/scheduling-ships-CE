@@ -33,8 +33,27 @@ void init_canal(){
 
     struct Ocean leftO;
     struct Ocean rightO;
+    rightO.numShips = 0;
+    rightO.canalLength = 100;
+    rightO.canalCapacity = 5;
     leftO.side=0;
     rightO.side=1;
+    Node* s=NULL;
+    Node* l=NULL;
+    rightO.ships=s;
+    leftO.ships=l;
+
+    struct Ship ship1 = {NORMAL, 10, 1};
+    struct Ship ship2 = {PESQUERO, 20, 2};   // Barco pesquero, velocidad 20, prioridad 2
+    struct Ship ship3 = {PATRULLA, 30, 3}; 
+    addShip(&rightO, ship1);
+    addShip(&rightO, ship2);
+    addShip(&rightO, ship3);
+
+    addShip(&leftO, ship1);
+    addShip(&leftO, ship2);
+    addShip(&leftO, ship3);
+    
     
     if (strcmp(userData->scheduler, "FCFS") == 0) {
         c.right_queue=fcfs(&rightO);
@@ -60,15 +79,19 @@ void init_canal(){
         printf("NO VALID SHEDULER \n");
     }
 
+    for(int o = 1; o < c.canal_length+1; o++){
+        printf("CANAL[%d]: %d \n",o,getValue(&c.right_queue,o) );
+    }
 
 
 
-    for(int i=0;i<c.max_ships_queue;i++){
+
+    /*for(int i=0;i<c.max_ships_queue;i++){
         
         struct Ship s;
         insertAtBeginning(&c.right_queue,s,1);
         insertAtBeginning(&c.left_queue,s,1);
-    }
+    }*/
     //strcpy(userData->controlMethod, controlMethod->valuestring);
     //c.canal_flow_control=userData->controlMethod;//
     
