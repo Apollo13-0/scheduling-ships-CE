@@ -1,4 +1,5 @@
 #include "menu.h"
+#include "scheduler_gui.h"
 
 GtkWidget *algorithm_label, *algorithm_combo, *channel_label, *channel_combo, *confirm_button, *param_label, *param_entry;
 
@@ -34,8 +35,10 @@ void on_button_clicked(GtkButton *button, gpointer user_data) {
     g_print("Algoritmo de calendarización: %s\n", user_selection->selected_calendarization);
     g_print("Parámetro extra: %s\n", user_selection->extra_param_text);
     g_print("Algoritmo de canal: %s\n", user_selection->selected_channel);
-}
 
+    // Llamar a la función para crear la ventana del programador
+    create_scheduler_window(user_selection);
+}
 // Función para crear el menú
 void create_menu(GtkWidget *vbox, UserSelection *user_data) {
     algorithm_label = gtk_label_new("Seleccione el algoritmo de calendarización:");
