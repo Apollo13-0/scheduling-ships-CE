@@ -12,10 +12,10 @@ void printShip(struct Ship b) {
             printf("Pesquero------>");
             break;
         case PATRULLA:
-            printf("Patrulla\n");
+            printf("Patrulla");
             break;
     }
     
     printf("Velocidad: %i------>", b.speed);
-    printf("Prioridad: %i\n", b.priority);
+    printf("Prioridad: %i", b.priority);
 }

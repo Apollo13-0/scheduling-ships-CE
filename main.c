@@ -13,8 +13,10 @@ int main() {
     //hiloTest();
     //mutexTest();
     //configTest();
-    canalTest();
-    //test_schedulers();
+    //canalTest();
+    test_schedulers();
 
     return 0;
 }
+
+

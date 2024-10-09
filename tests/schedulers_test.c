@@ -1,13 +1,27 @@
 #include "schedulers_test.h"
 #include <stdio.h>
 
+// Función para imprimir la lista de barcos
+void printShipList(Node* head) {
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    Node* current = head;
+    while (current != NULL) {
+        if (current->booked == 1) {  // Si el nodo está ocupado, imprimimos el barco
+            printShip(current->data);
+        }
+        current = current->next;
+    }
+}
+
 // Función para probar los algoritmos de calendarización
-void test_schedulers() {
+void test_schedulers() {   
     // Crear un océano para la prueba
     struct Ocean ocean;
     ocean.numShips = 0;
-    ocean.canalLength = 100;
-    ocean.canalCapacity = 5;
     ocean.side = 0;  // Lado izquierdo (0)
 
     // Crear algunos barcos para las pruebas
@@ -23,25 +37,25 @@ void test_schedulers() {
     // Probar el algoritmo FCFS
     printf("Testing FCFS:\n");
     Node* fcfsResult = fcfs(&ocean);
-    printListForward(fcfsResult);  // Imprimir los barcos en el orden FCFS
+    printShipList(fcfsResult);
 
     // Probar el algoritmo Round Robin con quantum = 2
     printf("\nTesting Round Robin (quantum = 2):\n");
     Node* rrResult = roundRobin(&ocean, 2);
-    printListForward(rrResult);  // Imprimir los barcos en el orden de Round Robin
+    printShipList(rrResult);
 
     // Probar el algoritmo SJF (Shortest Job First)
     printf("\nTesting SJF:\n");
     Node* sjfResult = sjf(&ocean);
-    printListForward(sjfResult);  // Imprimir los barcos en el orden de SJF
+    printShipList(sjfResult);
 
     // Probar el algoritmo de Prioridad
     printf("\nTesting Priority:\n");
     Node* priorityResult = priorityScheduler(&ocean);
-    printListForward(priorityResult);  // Imprimir los barcos en el orden de Prioridad
+    printShipList(priorityResult);
 
     // Probar el algoritmo Tiempo Real (Real-Time) con maxTime = 5
     printf("\nTesting Real-Time (maxTime = 5):\n");
     Node* realTimeResult = realTime(&ocean, 5);
-    printListForward(realTimeResult);  // Imprimir los barcos en el orden de Tiempo Real
+    printShipList(realTimeResult);
 }
