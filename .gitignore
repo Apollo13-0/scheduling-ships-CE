@@ -54,5 +54,6 @@ dkms.conf
 .vscode/settings.json
 
 .vscode/tasks.json
+scheduling_ships
 
 scheduling_ships 

@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "schedulers.h": "c",
+        "stdio.h": "c",
+        "ship_test.h": "c",
+        "stdlib.h": "c",
+        "linkedlist.h": "c",
+        "ship.h": "c",
+        "ocean.h": "c",
+        "schedulers_test.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}
