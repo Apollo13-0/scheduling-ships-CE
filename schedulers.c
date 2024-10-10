@@ -40,23 +40,24 @@ Node* roundRobin(struct Ocean *ocean, int quantum) {
 
     return orderedList;  // Retornar la lista ordenada
 }
-
 /////////////////////////////////////////////////////////////
-// Shortest Job First (SJF)
+// Shortest Job First (SJF) - Modificado a "Job más rápido primero"
 /////////////////////////////////////////////////////////////
 
-// Función auxiliar para insertar barcos en orden de velocidad
+// Función auxiliar para insertar barcos en orden de mayor a menor velocidad
 void insertInOrder(Node** head, struct Ship ship) {
     Node* current;
     Node* newNode = createNode(ship, 1);
 
-    // Si la lista está vacía o el nuevo nodo es menor que el primero
-    if (*head == NULL || (*head)->data.speed >= ship.speed) {
+    // Si la lista está vacía o el nuevo nodo es mayor que el primero
+    if (*head == NULL || (*head)->data.speed <= ship.speed) {
+        // Insertar al inicio si la lista está vacía o si el nuevo barco es más rápido
         newNode->next = *head;
         *head = newNode;
     } else {
         current = *head;
-        while (current->next != NULL && current->next->data.speed < ship.speed) {
+        // Buscar la posición adecuada para insertar el nuevo barco (mayor a menor)
+        while (current->next != NULL && current->next->data.speed > ship.speed) {
             current = current->next;
         }
         newNode->next = current->next;
@@ -65,19 +66,19 @@ void insertInOrder(Node** head, struct Ship ship) {
 }
 
 Node* sjf(struct Ocean *ocean) {
-    printf("SJF order (Shortest Job First):\n");
+    printf("SJF order (Mayor a menor velocidad):\n");
 
     Node* current = ocean->ships;
-    Node* orderedList = NULL;  // Nueva lista enlazada para almacenar el orden SJF
-
-    // Insertar cada barco en la lista ordenada por velocidad
+    Node* orderedList = NULL;
+    // Insertar cada barco en la lista ordenada por velocidad de mayor a menor
     while (current != NULL) {
         insertInOrder(&orderedList, current->data);
         current = current->next;
     }
 
-    return orderedList;  // Retornar la lista enlazada ordenada por SJF
+    return orderedList;  //Retornar la lista enlazada ordenada
 }
+
 
 /////////////////////////////////////////////////////////////
 // Prioridad
