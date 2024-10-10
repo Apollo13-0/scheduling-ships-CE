@@ -12,6 +12,14 @@
     int booked;
 } Node;*/
 
+/*
+
+===================LISTA ENLAZADA TRABAJA CON INDICE A PARTIR DE 1===================
+
+
+*/
+
+
 // Function to create a new node with given value as data
 Node* createNode(struct Ship data, int type)
 {
@@ -214,7 +222,7 @@ int getValue(Node** head, int position)
 
     // Comprobar si la posición es válida
     if (temp == NULL) {
-        printf("La posición %d no existe en la lista.\n", position);
+        printf("GET VALUE La posición %d no existe en la lista.\n", position);
         return -1;  // Valor de error, puede ser personalizado
     }
 
@@ -314,7 +322,7 @@ struct Ship getShip(Node** head, int position)
 
 void setShip(Node** head, struct Ship ship, int position)
 {
-    
+
     // Comprobar si la lista está vacía
     if (*head == NULL) {
         printf("La lista está vacía.\n");
@@ -334,7 +342,37 @@ void setShip(Node** head, struct Ship ship, int position)
         printf("La posición %d no existe en la lista.\n", position);
         return -1;  // Valor de error, puede ser personalizado
     }
-
+    
     // Devolver el valor del nodo en la posición dada
     temp->data=ship;
+    
 }
+
+Node* getNode(Node** head, int position)
+{
+    
+    // Comprobar si la lista está vacía
+    if (*head == NULL) {
+        printf("La lista está vacía.\n");
+        return -1;  // Valor de error, puede ser personalizado
+    }
+
+    Node* temp = *head;
+    int i;
+
+    // Recorrer la lista hasta llegar a la posición
+    for (i = 1; temp != NULL && i < position; i++) {
+        temp = temp->next;
+    }
+
+    // Comprobar si la posición es válida
+    if (temp == NULL) {
+        printf("GET VALUE La posición %d no existe en la lista.\n", position);
+        return -1;  // Valor de error, puede ser personalizado
+    }
+
+    // Devolver el valor del nodo en la posición dada
+    return temp;
+}
+
+

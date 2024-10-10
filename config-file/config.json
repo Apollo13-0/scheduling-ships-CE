@@ -1,9 +1,9 @@
 {
-    "controlMethod": "TICO",
-    "scheduler": "SJF",
+    "controlMethod": "EQUIDAD",
+    "scheduler": "FCFS",
     "canalLength": 8,
     "shipSpeed": 20,
-    "amountShipsInQ": 5,
+    "amountShipsInQ": 3,
     "controlSignTime": 2,
     "W": 3
 }

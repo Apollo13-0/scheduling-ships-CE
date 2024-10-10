@@ -17,5 +17,5 @@ void printShip(struct Ship b) {
     }
     
     printf("Velocidad: %i------>", b.speed);
-    printf("Prioridad: %i", b.priority);
+    printf("Prioridad: %i\n", b.priority);
 }

@@ -34,8 +34,7 @@ void init_canal(){
     struct Ocean leftO;
     struct Ocean rightO;
     rightO.numShips = 0;
-    rightO.canalLength = 100;
-    rightO.canalCapacity = 5;
+    leftO.numShips = 0;
     leftO.side=0;
     rightO.side=1;
     Node* s=NULL;
@@ -79,8 +78,8 @@ void init_canal(){
         printf("NO VALID SHEDULER \n");
     }
 
-    for(int o = 1; o < c.canal_length+1; o++){
-        printf("CANAL[%d]: %d \n",o,getValue(&c.right_queue,o) );
+    for(int o = 1; o < c.max_ships_queue+1; o++){
+        printf("CANAL[%d]: %d \n",o,getShip(&c.right_queue,o).priority );
     }
 
 
@@ -338,7 +337,7 @@ void moveToLeft(struct canal c, int vaciando){
             }
         }
         if(data!=-1){
-            printf("METE BARCO\n");
+            printf("METE BARCO: %d\n",sh.priority);
             setValue(&c.canal_list,data ,  c.canal_length);
             setShip(&c.canal_list,sh,  c.canal_length);
             
@@ -348,7 +347,8 @@ void moveToLeft(struct canal c, int vaciando){
     
     
     for(int o = 1; o < c.canal_length+1; o++){
-        printf("CANAL[%d]: %d --> ", o,getValue(&c.canal_list,o) );
+        printf("SALE: %d\n",o);
+        printf("CANAL[%d]: %d --> ", o,getNode(&c.canal_list,o)->booked );
         printf("TIPO: %s  PRIORIDAD: %d\n",getShip(&c.canal_list,o).type, getShip(&c.canal_list,o).priority);
         //printShip(getShip(&c.canal_list,o));
     } 
@@ -394,18 +394,18 @@ void moveToRight(struct canal c,int vaciando){
             }
         }
         if(data!=-1){
-            printf("METE BARCO\n");
+            printf("METE BARCO: %d\n",sh.priority);
             setValue(&c.canal_list,data , 1);
             setShip(&c.canal_list,sh,  c.canal_length);
+            
         }
     
     }
-    
-    
     for(int o = 1; o < c.canal_length+1; o++){
-        printf("CANAL[%d]: %d --> ",o,getValue(&c.canal_list,o) );
-        printf("TIPO: %s  PRIORIDAD: %d\n",getShip(&c.canal_list,o).type, getShip(&c.canal_list,o).priority);
-        //printShip(getShip(&c.canal_list,o));
+        //printf("SALE: %d\n",o);
+        //printf("CANAL[%d]: %d --> ",o,getNode(&c.canal_list,o)->booked );
+        //printf("TIPO: %s  PRIORIDAD: %d\n",getShip(&c.canal_list,o).type, getShip(&c.canal_list,o).priority);
+        printShip(getShip(&c.canal_list,o));
     } 
     printf("==============================================\n");
 
