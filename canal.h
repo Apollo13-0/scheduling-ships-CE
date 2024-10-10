@@ -1,6 +1,7 @@
 #ifndef CANAL_H
 #define CANAL_H
 #include "linkedList.h"
+#include "ocean.h"
 
 
 
@@ -16,13 +17,14 @@ struct canal {
     int canal_length;
     int max_ships_queue;
     Node* canal_list;
-    Node* left_queue;
-    Node* right_queue;
+    struct Ocean left_ocean;
+    struct Ocean right_ocean;
 
 };
 
-void print_canal(struct canal c);
-void init_canal();
+void equidad (struct canal *c, int w);
+void print_canal(struct canal *c);
+void init_canal(struct canal *c);
 
 #endif
 

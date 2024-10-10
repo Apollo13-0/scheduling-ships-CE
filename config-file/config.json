@@ -1,5 +1,5 @@
 {
-    "controlMethod": "TICO",
+    "controlMethod": "EQUIDAD",
     "scheduler": "SJF",
     "canalLength": 8,
     "shipSpeed": 20,
