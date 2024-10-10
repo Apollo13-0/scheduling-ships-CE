@@ -48,6 +48,7 @@ void init_canal(struct canal *c){
         insertAtBeginning(&c->canal_list,s,0);
     }
     
+    
 
 
     
@@ -288,6 +289,11 @@ void moveToLeft(struct canal *c, int vaciando){
     //VERIFICA SI EL ULTIMO ES 1
     if(getValue(&c->canal_list,1)==1){
         setValue(&c->canal_list, 0, 1);
+        struct Ship emptyShip;
+        emptyShip.priority=-1;
+        emptyShip.speed=-1;
+
+        setShip(&c->canal_list, emptyShip, 1);
     } 
 
     for(int k=1; k<c->canal_length;k++){//MOVER LOS BARCOS DEL CANAL
@@ -301,7 +307,11 @@ void moveToLeft(struct canal *c, int vaciando){
             setShip(&c->canal_list, s, k);
 
             setValue(&c->canal_list,0 , k+1);//DEJAR VACIA LA POSICION ANTERIOR
-            
+            struct Ship emptyShip;
+            emptyShip.priority=0;
+            emptyShip.speed=0;
+
+            setShip(&c->canal_list, emptyShip, k+1);
         }
         
         else{
@@ -331,18 +341,24 @@ void moveToLeft(struct canal *c, int vaciando){
     
     }
     
-    
+    printf("test\n");
+    printListForward(c->canal_list);/*
     for(int o = 1; o < c->canal_length+1; o++){
         printf("CANAL[%d]: %d --> ", o,getValue(&c->canal_list,o) );
         printf("TIPO: %s  PRIORIDAD: %d\n",getShip(&c->canal_list,o).type, getShip(&c->canal_list,o).priority);
         //printShip(getShip(&c->canal_list,o));
-    } 
+    } */
     printf("==============================================\n");
 
 
 }
 void moveToRight(struct canal *c,int vaciando){
     if(getValue(&c->canal_list,c->canal_length)==1){
+        struct Ship emptyShip;
+        emptyShip.priority=-1;
+        emptyShip.speed=-1;
+
+        setShip(&c->canal_list, emptyShip, c->canal_length);
         setValue(&c->canal_list, 0, c->canal_length);
     } 
 
@@ -356,7 +372,11 @@ void moveToRight(struct canal *c,int vaciando){
             setValue(&c->canal_list, data, k);//METER BARCO ANTERIOR EN POS ACTUAL
             setShip(&c->canal_list, s, k);
             setValue(&c->canal_list,0 , k-1);//DEJAR VACIA LA POSICION ANTERIOR
-            
+            struct Ship emptyShip;
+            emptyShip.priority=0;
+            emptyShip.speed=0;
+
+            setShip(&c->canal_list, emptyShip, k-1);
         }
         
         else{
@@ -368,10 +388,10 @@ void moveToRight(struct canal *c,int vaciando){
     if(getValue(&c->canal_list,1)==0 && c->left_ocean.ships!=NULL && vaciando!=1){
         int data=-1;
         struct Ship sh;
-        for (int s=0;s<=c->max_ships_queue;s++){
+        for (int s=1;s<=c->max_ships_queue;s++){
             if(getValue(&c->left_ocean,s)==1 ){
                 data=getValue(&c->left_ocean,s);
-                sh=getShip(&c->right_ocean,s);
+                sh=getShip(&c->left_ocean,s);
                 setValue(&c->left_ocean,0,s);
                 break;
             }else{
@@ -381,18 +401,19 @@ void moveToRight(struct canal *c,int vaciando){
         if(data!=-1){
             printf("METE BARCO\n");
             setValue(&c->canal_list,data , 1);
-            setShip(&c->canal_list,sh,  c->canal_length);
+            setShip(&c->canal_list,sh,  1);
         }
     
     }
     
     printf("test\n");
+    printListForward(c->canal_list);
     
-    for(int o = 1; o < c->canal_length+1; o++){
+    /*for(int o = 1; o < c->canal_length+1; o++){
         printf("CANAL[%d]: %d --> ",o,getValue(&c->canal_list,o));
         printf("TIPO: %s  PRIORIDAD: %d\n",getShip(&c->canal_list,o).type, getShip(&c->canal_list,o).priority);
         //printShip(getShip(&c->canal_list,o));
-    } 
+    } */
     printf("==============================================\n");
 
 

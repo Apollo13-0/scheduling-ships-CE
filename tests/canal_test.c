@@ -28,8 +28,9 @@ void canalTest() {
     addShip(&canal1.right_ocean, ship5);
     addShip(&canal1.right_ocean, ship6);
 
-    printf("===========INICIANDO EQUIDAD===============\n");
-    equidad(&canal1, 3);
+    //printf("===========INICIANDO EQUIDAD===============\n");
+    //equidad(&canal1, 3);
+    tico(&canal1);
 }    
 
 

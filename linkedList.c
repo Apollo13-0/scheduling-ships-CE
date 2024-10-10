@@ -166,9 +166,12 @@ void deleteAtPosition(Node** head, int position)
 void printListForward(Node* head)
 {
     Node* temp = head;
-    printf("Forward List: ");
+    printf("Forward List: \n");
+    int i=1;
     while (temp != NULL) {
-        printf("- %d - \n", temp->data);
+        printf("CANAL[%d]: %d --> %d--> %d\n", i, temp->booked, temp->data.priority,temp->data.speed);
+        //printf(" %d - \n", temp->booked);
+        i++;
         temp = temp->next;
     }
     printf("\n");
