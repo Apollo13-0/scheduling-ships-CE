@@ -35,12 +35,12 @@ void init_canal(struct canal *c){
     struct Ocean leftO;
     leftO.ships=NULL;
     leftO.side=0;
-    c->left_ocean=leftO;
+    //c->left_ocean=leftO;
 
     struct Ocean rightO;
     rightO.ships=NULL;
     rightO.side=1;
-    c->right_ocean=rightO;
+    //c->right_ocean=rightO;
 
 
     for(int i=0; i<c->canal_length;i++){

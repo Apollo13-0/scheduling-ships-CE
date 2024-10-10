@@ -24,13 +24,17 @@ void canalTest() {
     struct Ship ship6 = {PATRULLA, 18, 3};
 
     printf("Adding ships to right ocean\n");
+    addShip(&canal1.right_ocean, ship6);
     addShip(&canal1.right_ocean, ship4);
     addShip(&canal1.right_ocean, ship5);
-    addShip(&canal1.right_ocean, ship6);
+    
+
+    canal1.left_ocean.ships=priorityScheduler(&canal1.left_ocean);
+    canal1.right_ocean.ships=priorityScheduler(&canal1.right_ocean);
 
     //printf("===========INICIANDO EQUIDAD===============\n");
-    //equidad(&canal1, 3);
-    tico(&canal1);
+    equidad(&canal1, 3);
+    //tico(&canal1);
 }    
 
 
