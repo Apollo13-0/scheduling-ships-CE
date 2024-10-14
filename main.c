@@ -6,6 +6,7 @@
 #include "tests/schedulers_test.h"
 
 
+#include "tests/server_test.h"
 
 int main() {
     //Si quieren correr pruebas en el main, crear una función aparte en un archivo aparte en tests/ y llamarlas aquí
@@ -15,6 +16,7 @@ int main() {
     //configTest();
     canalTest();
     //test_schedulers();
+    //serverTest();
 
     return 0;
 }
