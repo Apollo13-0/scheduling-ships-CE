@@ -4,10 +4,11 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
-void main()
-{
-    int fd;
-    fd = open("/dev/ttyACM0", O_RDWR | O_NOCTTY | O_NONBLOCK);
+#include <sys/ioctl.h>
+
+int configureSerialPort(){
+        int fd;
+    fd = open("/dev/ttyACM0", O_RDWR);
 
     struct termios set;
     tcgetattr(fd, &set);
@@ -25,13 +26,13 @@ void main()
     set.c_cc[VTIME] = 1;                            // wait idefintely untill you recieve some characters
     set.c_oflag &= ~OPOST;                          /*No Output Processing*/
     tcsetattr(fd, TCSANOW, &set);
-    // tcflush(fd, TCIFLUSH); //discards the old data recieved by the serial buffer
+    tcflush(fd, TCIFLUSH); //discards the old data recieved by the serial buffer
     // TCSANOW makes sure that the changes make in termios struct are reflected instantly
-    char write_buffer[40];
-    while (1)
-    {
-        scanf("%s", write_buffer);
-        write(fd, write_buffer, strlen(write_buffer));
-    }
-    close(fd);
+    return fd;
+}
+
+void writeSerialPort(int fd, char *write_buffer){
+    sleep(2);
+    write(fd, write_buffer, strlen(write_buffer));
+    sleep(2);
 }

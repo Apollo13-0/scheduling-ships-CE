@@ -1,32 +1,17 @@
-// Arduino mega 2560
-
-// Decoder D,C,B,A -> 24,23,22,25
-// Decoder D,C,B,A -> 28,27,26,29
-// Led indicador de barco siguiente derecho -> 30,31,32
-// Led indicador de barco siguiente izquierdo -> 33,34,35
-// 25% canal -> 36,37,38
-// 50% canal -> 39,40,41
-// 75% canal -> 42,43,44
-// 100% canal -> 45,46,47
-// Letrero -> 48
-
-// Barco tipo 0 -> Normal (rojo)
-// Barco tipo 1 -> Pesquero (verde)
-// Barco tipo 2 -> Patrulla (azul)
-
-// lista de pines
+// Lista de pines
 int digitalPin[] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48};
-int leftOcean[] = {};
-int rigthOcean[] = {};
 
-// test displayChannel
-int len = 20;
-int boat = 0;
-int nextBoat = 1;
-int numBoats = 5;
+// Variables
+int leftOceanNumBoats; 
+int rigthOceanNumBoats;
+char leftOceanNextBoat;
+char rigthOceanNextBoat;
+int channelLen = 4;
+char channel[4];
+int sentido;
 
+// Función para convertir un número a binario en 4 bits
 void numeroABinario4Bits(int numero, int binario[4]) {
-
   if (numero < 0 || numero > 15) {
     Serial.println("Error: El número debe estar entre 0 y 15.");
     return;
@@ -37,7 +22,8 @@ void numeroABinario4Bits(int numero, int binario[4]) {
   }
 }
 
-void displayNumBoats(char ocean,int num) {
+// Función para mostrar el número de barcos
+void displayNumBoats(char ocean, int num) {
   int binario[4];
   numeroABinario4Bits(num, binario);
 
@@ -52,20 +38,21 @@ void displayNumBoats(char ocean,int num) {
   digitalWrite(pinA, binario[3]); // A
 }
 
-void displayNextBoat(char ocean, int type) {
+// Función para mostrar el siguiente barco
+void displayNextBoat(char ocean, char type) {
   int pinR = (ocean == 'L') ? 30 : 33;
   int pinG = (ocean == 'L') ? 31 : 34;
   int pinB = (ocean == 'L') ? 32 : 35;
 
-  if (type == 0) {
+  if (type == 'N') {
     digitalWrite(pinR, LOW); 
     digitalWrite(pinG, HIGH);
     digitalWrite(pinB, HIGH);
-  } else if (type == 1) {
+  } else if (type == 'E') {
     digitalWrite(pinR, HIGH);
     digitalWrite(pinG, LOW); 
     digitalWrite(pinB, HIGH);
-  } else if (type == 2) {
+  } else if (type == 'P') {
     digitalWrite(pinR, HIGH);
     digitalWrite(pinG, HIGH);
     digitalWrite(pinB, LOW);
@@ -76,39 +63,45 @@ void displayNextBoat(char ocean, int type) {
   }
 }
 
-void displayChannel(int boatType, int pos, int channelLen, int sentido) {
-  int pinR = 0;
-  int pinG = 0;
-  int pinB = 0;
+// Función para mostrar el canal y su dirección
+void displayChannel(char channel[], int sentido) {
+  int red1 = (channel[0] == 'N') ? 0 : 1;
+  int green1 = (channel[0] == 'E') ? 0 : 1;
+  int blue1 = (channel[0] == 'P') ? 0 : 1;
 
-  int red = (boatType == 0) ? 0 : 1;
-  int green = (boatType == 1) ? 0 : 1;
-  int blue = (boatType == 2) ? 0 : 1;
+  int red2 = (channel[1] == 'N') ? 0 : 1;
+  int green2 = (channel[1] == 'E') ? 0 : 1;
+  int blue2 = (channel[1] == 'P') ? 0 : 1;
+
+  int red3 = (channel[2] == 'N') ? 0 : 1;
+  int green3 = (channel[2] == 'E') ? 0 : 1;
+  int blue3 = (channel[2] == 'P') ? 0 : 1;
+
+  int red4 = (channel[3] == 'N') ? 0 : 1;
+  int green4 = (channel[3] == 'E') ? 0 : 1;
+  int blue4 = (channel[3] == 'P') ? 0 : 1;
 
   // Sentido del canal
-  digitalWrite(48, sentido == 0 ? HIGH : LOW);
+  digitalWrite(48, sentido);
 
-  // Calcular el porcentaje recorrido por el barcon en el canal usando pos y channelLen
-  int percentage = (pos * 100) / channelLen;
-  if (percentage <= 25) {
-    digitalWrite(36, red); 
-    digitalWrite(37, green);
-    digitalWrite(38, blue);
-  } else if (percentage <= 50) {
-    digitalWrite(39, red); 
-    digitalWrite(40, green);
-    digitalWrite(41, blue);
-  } else if (percentage <= 75) {
-    digitalWrite(42, red); 
-    digitalWrite(43, green);
-    digitalWrite(44, blue);
-  } else {
-    digitalWrite(45, red);
-    digitalWrite(46, green);
-    digitalWrite(47, blue);
-  }
+  digitalWrite(36, red1); 
+  digitalWrite(37, green1);
+  digitalWrite(38, blue1);
+
+  digitalWrite(39, red2); 
+  digitalWrite(40, green2);
+  digitalWrite(41, blue2);
+
+  digitalWrite(42, red3); 
+  digitalWrite(43, green3);
+  digitalWrite(44, blue3);
+
+  digitalWrite(45, red4);
+  digitalWrite(46, green4);
+  digitalWrite(47, blue4);
 }
 
+// Función para limpiar el canal
 void cleanChannel() {
   for (int i = 36; i < 48; i++) {
     digitalWrite(i, 1);
@@ -116,9 +109,9 @@ void cleanChannel() {
 }
 
 void setup() {
-  
   Serial.begin(9600);
-  // put your setup code here, to run once:
+
+  // Configurar todos los pines
   for (int i = 0; i < 26; i++) {
     pinMode(digitalPin[i], OUTPUT);
   }
@@ -126,34 +119,56 @@ void setup() {
   for (int i = 30; i < 48; i++) {
     digitalWrite(i, 1);
   }
-
-
 }
-
 void loop() {
-  // Read serial data
+  // Leer datos del puerto serie
   if (Serial.available() > 0) {
-    char data = Serial.read();
+    // Leer los datos en un String
+    String data = Serial.readStringUntil('\n'); // Leer hasta un salto de línea
+    data.trim();
+    // Verificar si los datos recibidos son de la longitud correcta
+    Serial.println(data.length());
+    if (data.length() == 12) {
+      // Extraer los valores del string
+      leftOceanNumBoats = data.charAt(0) - '0';
+      leftOceanNextBoat = data.charAt(1); // Extraer el segundo carácter
+      displayNextBoat('L', leftOceanNextBoat);
+      // Mostrar el carácter para depurar
+      Serial.print("Valor de leftOceanNextBoat: ");
+      Serial.println(data.charAt(1));
+      displayNextBoat('L', data.charAt(1));
 
-    // Updata global data
-    // leftOcean
-    // rigthOcean
-    // channelLen
-    
+      // Copiar el canal (caracteres en las posiciones 3 a 6)
+      data.substring(3, 7).toCharArray(channel, 5);
+
+      sentido = data.charAt(8) - '0';
+      rigthOceanNumBoats = data.charAt(10) - '0';
+      rigthOceanNextBoat = data.charAt(11);
+
+      // Mostrar los datos en el monitor serie para depuración
+      Serial.println("Datos recibidos:");
+      Serial.println(data);
+      Serial.println("Número de barcos en el océano izquierdo:");
+      Serial.println(leftOceanNumBoats);
+      Serial.println("Próximo barco en el océano izquierdo:");
+      Serial.println(leftOceanNextBoat); // Aquí mostrar de nuevo el valor
+      Serial.println("Canal:");
+      Serial.println(channel);
+      Serial.println("Sentido:");
+      Serial.println(sentido);
+      Serial.println("Número de barcos en el océano derecho:");
+      Serial.println(rigthOceanNumBoats);
+      Serial.println("Próximo barco en el océano derecho:");
+      Serial.println(rigthOceanNextBoat);
+    } else {
+      Serial.println("Error: Longitud de datos incorrecta");
+    }
   }
 
-  
-  displayNumBoats('R', 5);
-  
-  for (int i = 0; i < len; i++) {
-    displayNumBoats('L', numBoats);
-    displayNextBoat('L', nextBoat);
-    displayNextBoat('R', 2);
-    displayChannel(boat, i, len, 0);
-    delay(1000);
-    
-  }
-  numBoats--;
-
-  cleanChannel();
+   // Mostrar barcos y canal
+  displayNumBoats('R', rigthOceanNumBoats);
+  displayNumBoats('L', leftOceanNumBoats);
+  displayNextBoat('R', rigthOceanNextBoat);
+  //displayNextBoat('L', leftOceanNextBoat);
+  displayChannel(channel, sentido);
 }
