@@ -1,6 +1,8 @@
 #ifndef BARCO_H
 #define BARCO_H
 
+#include "CEthreads.h"
+
 typedef enum {
     NORMAL,
     PESQUERO,
@@ -11,6 +13,7 @@ struct Ship {
     ShipType type;
     int speed;
     int priority;
+    thread_t thread;
 };
 
 void printShip(struct Ship b);

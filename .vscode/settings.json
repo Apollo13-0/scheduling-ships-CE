@@ -7,7 +7,9 @@
         "linkedlist.h": "c",
         "ship.h": "c",
         "ocean.h": "c",
-        "schedulers_test.h": "c"
+        "schedulers_test.h": "c",
+        "canal_test.h": "c",
+        "canal.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

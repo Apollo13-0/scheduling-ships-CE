@@ -35,72 +35,21 @@ void init_canal(struct canal *c){
     struct Ocean leftO;
     leftO.ships=NULL;
     leftO.side=0;
-    //c->left_ocean=leftO;
+    c->left_ocean=leftO;
 
     struct Ocean rightO;
     rightO.ships=NULL;
     rightO.side=1;
-    //c->right_ocean=rightO;
+    c->right_ocean=rightO;
 
 
     for(int i=0; i<c->canal_length;i++){
-        struct Ship s ;
+        struct Ship s;
+        s.priority=0;
+        s.speed=0;
         insertAtBeginning(&c->canal_list,s,0);
     }
     
-    
-
-
-    
-    // if (strcmp(userData->scheduler, "FCFS") == 0) {
-    //     c.right_ocean=fcfs(&rightO);
-    //     c.left_ocean=fcfs(&leftO);
-    // } else if (strcmp(userData->scheduler, "RR") == 0) {
-    //     c.right_ocean=roundRobin(&rightO,10);
-    //     c.left_ocean=roundRobin(&leftO,10);
-    // }else if (strcmp(userData->scheduler, "SJF") == 0) {
-    //     printf("SJF\n");
-    //     c.right_ocean=sjf(&rightO);
-    //     c.left_ocean=sjf(&leftO);
-        
-    // }else if (strcmp(userData->scheduler, "PRIORITY") == 0) {
-    //     c.right_ocean=priorityScheduler(&rightO);
-    //     c.left_ocean=priorityScheduler(&leftO);
-        
-    // }else if (strcmp(userData->scheduler, "RT") == 0) {
-    //     c.right_ocean=realTime(&rightO,5);
-    //     c.left_ocean=realTime(&leftO,5);
-        
-    // }
-    // else{
-    //     printf("NO VALID SHEDULER \n");
-    // }
-
-
-
-
-    // for(int i=0;i<c.max_ships_queue;i++){
-        
-    //     struct Ship s;
-    //     insertAtBeginning(&c.right_ocean,s,1);
-    //     insertAtBeginning(&c.left_ocean,s,1);
-    // }
-    // //strcpy(userData->controlMethod, controlMethod->valuestring);
-    // //c.canal_flow_control=userData->controlMethod;//
-    
-    // if (strcmp(userData->controlMethod, "EQUIDAD") == 0) {
-    //     c.canal_flow_control= EQUIDAD;
-    //     equidad(c,userData->W);
-    // } else if (strcmp(userData->controlMethod, "LETRERO") == 0) {
-    //     c.canal_flow_control= LETRERO;
-    //     letrero(c,userData->controlSignTime);
-    // }else if (strcmp(userData->controlMethod, "TICO") == 0) {
-    //     c.canal_flow_control= TICO;
-    //     tico(c);
-        
-    // }else{
-    //     printf("NO VALID CONTROL METHOD \n");
-    // }
 }
 
 

@@ -10,7 +10,6 @@ UserData* initUserData() {
 
     // Verificar si ya existe una instancia
     if (userData != NULL) {
-        printf("An instance of UserData already exists.\n");
         return userData;
     }
 
